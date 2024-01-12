@@ -1,0 +1,12 @@
+Key Establishment Scheme
+  - ECDH: NIST Standard P256 Elliptic Curve 
+  - HKDF: NIST SP800-56C HMAC Extract-andExpand Function
+
+ECDSA sign public key
+
+Cryptographic algorithms 
+  - AES-GCM 128 
+  - HMAC-SHA256 
+
+  NIST SP800-90A/B/C Random Number Generator (RNG)
+

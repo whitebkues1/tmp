@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<raModuleDescription>
+    <module config="config.driver.armorflash" display="Storage|${module.driver.armorflash.name} ArmorFlash Driver on r_armorflash" id="module.driver.armorflash_on_armorflash" version="1" >
+        <constraint display="Unique name required for each instance">
+            "${interface.driver.armorflash.${module.driver.armorflash.name}}" === "1"
+        </constraint> 
+		<requires id="module.driver.armorflash.requires.spi" interface="interface.driver.spi" display="Requires SPI" find="true"/>
+        <provides interface="interface.driver.armorflash.${module.driver.armorflash.name}" />
+        <property default="g_armorflash${_instance}" display="Name" id="module.driver.armorflash.name" description="Module name.">
+            <constraint display="Name must be a valid C symbol">testSymbol("${module.driver.armorflash.name}")</constraint>
+        </property>
+        <header>
+#define SPI_NAME ${module.driver.armorflash.requires.spi::module.driver.spi.name}##_ctrl
+#define SPI_CFG ${module.driver.armorflashii.requires.spi::module.driver.spi.name}##_cfg
+
+
+        </header>
+
+        <includes></includes>
+        <declarations>
+        </declarations>
+    </module>
+</raModuleDescription>

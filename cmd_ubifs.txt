@@ -67,3 +67,5 @@ demo命令
 
  cd /opt/edgeai-tiovx-apps/
 ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+
+dtc -I dtb -O dts -o k3-am62a7-sk.dts k3-am62a7-sk.dtb

@@ -1,0 +1,69 @@
+下载do fetch命令
+
+MACHINE=am62axx-evm bitbake linux-ti-staging --runall=fetch
+MACHINE=am62axx-evm bitbake u-boot-ti-staging --runall=fetch
+MACHINE=am62axx-evm bitbake tisdk-edgeai-image --runall=fetch
+编译命令
+
+MACHINE=am62axx-evm bitbake u-boot-ti-staging
+MACHINE=am62axx-evm bitbake linux-ti-staging
+MACHINE=am62axx-evm bitbake -k tisdk-base-image
+提取命令
+
+MACHINE=am62axx-evm devtool modify linux-ti-staging
+MACHINE=am62axx-evm devtool modify linux-ti-staging
+查找命令
+
+MACHINE=am62axx-evm bitbake -s | grep linux
+MACHINE=am62axx-evm bitbake -s | grep u-boot
+MACHINE=am62axx-evm bitbake -e linux-ti-staging | grep ^SRC_URI=
+MACHINE=am62axx-evm bitbake -e u-boot-ti-staging | grep ^SRC_URI=
+删除命令
+
+MACHINE=am62axx-evm bitbake tisdk-base-image -c cleansstate
+MACHINE=am62axx-evm bitbake -c cleansstate linux-ti-staging
+MACHINE=am62axx-evm bitbake -c cleansstate u-boot-ti-staging
+u-boot命令
+
+mtd list
+mtd erase spi-nand0
+fatload mmc 1 ${loadaddr} tiboot3.bin
+mtd write spi-nand0 $loadaddr 0x0 0x80000
+fatload mmc 1 ${loadaddr} tispl.bin
+mtd write spi-nand0 $loadaddr 0x80000 0x200000
+fatload mmc 1 ${loadaddr} u-boot.img
+mtd write spi-nand0 $loadaddr 0x280000 0x400000
+
+mtd read spi-nand0 0x85000000 0x0 50900
+cmp 0x82000000 0x85000000 50880
+
+run get_kern_mmc
+run get_fdt_mmc
+setenv bootargs console=${console} ${optargs} ubi.mtd=${ospi_nand_bootpart} root=${ospi_nand_bootvolume} rootfstype=ubifs rw
+booti ${loadaddr} - ${fdtaddr}
+
+ubi命令
+
+cat /proc/mtd
+flash_erase /dev/mtd5 0 0
+dd if=/dev/random of=tmp_write.txt bs=1 count=4096
+mtd_debug write /dev/mtd5 0 4096 tmp_write.txt
+mtd_debug read /dev/mtd5 0 4096 tmp_read.txt
+diff tmp_read.txt tmp_write.txt
+ubifs命令
+
+ubiformat /dev/mtd5
+ubiattach -p /dev/mtd5
+ubimkvol /dev/ubi0 -N rootfs -m
+mkdir /mnt/flash
+mount -t ubifs ubi0:rootfs /mnt/flash/
+
+ubinfo /dev/ubi0
+​​​​​​​ubiattach /dev/ubi_ctrl -p /dev/mtd5
+mount -t ubifs ubi0:rootfs /mnt/flash/
+
+ubidetch /dev/ubi_ctrl -m 5
+demo命令
+
+ cd /opt/edgeai-tiovx-apps/
+./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml

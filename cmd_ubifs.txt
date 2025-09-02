@@ -116,3 +116,51 @@ dtc -I dtb -O dts -o k3-am62a7-sk.dts k3-am62a7-sk.dtb
 				label = "ospi_nand.rootfs";
 				reg = <0x2000000 0x1e000000>;
 			};
+
+
+root@am62axx-evm:/opt/edgeai-tiovx-apps# dmesg | grep error
+[    5.831625] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+[    7.213652] vdec 30210000.video-codec: error -ENXIO: IRQ index 0 not found
+
+
+root@am62axx-evm:/opt/edgeai-tiovx-apps# dmesg | grep module
+[    0.739874] RPC: Registered named UNIX socket transport module.
+[    0.745955] RPC: Registered udp transport module.
+[    0.750767] RPC: Registered tcp transport module.
+[    0.755576] RPC: Registered tcp-with-tls transport module.
+[    0.761186] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    0.950266] loop: module loaded
+[    4.286716] cryptodev: loading out-of-tree module taints kernel.
+
+
+root@am62axx-evm:/opt/edgeai-tiovx-apps# dmesg | grep tiovx
+[   16.952116] audit: type=1701 audit(1748547914.340:18): auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=625 comm="edgeai-tiovx-ap" exe="/opt/edgeai-tiovx-apps/bin/Release/edgeai-tiovx-apps-main" sig=11 res=1
+
+
+
+[TIOVX_MODULES][ERROR] 519: v4l2_decode_enqueue_buf: [V4L2_DECODE] VIDIOC_QBUF failed
+
+root@am62axx-evm:/opt/edgeai-tiovx-apps# dmesg | grep failed
+[    4.303427] sysctl table check failed: ioctl/(null) procname is null
+[    4.315232] sysctl table check failed: ioctl/(null) No proc_handler
+[    5.831625] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+[    5.855991] cfg80211: failed to load regulatory.db
+[    7.222914] vdec 30210000.video-codec: failed to get irq resource, falling back to polling
+
+ps aux | grep edgeai-tiovx
+kill -9 <PID1> <PID2> ...
+
+lsmod | grep ti-v4l2
+rmmod ti_v4l2_codec
+modprobe ti_v4l2_codec
+
+echo "Stopping edgeai-tiovx processes..."
+killall -9 edgeai-tiovx-apps-main
+
+echo "Unloading ti-v4l2-codec module..."
+rmmod ti_v4l2_codec
+
+echo "Reloading ti-v4l2-codec module..."
+modprobe ti_v4l2_codec
+
+echo "Module has been reloaded. You can now try to run the demo again."

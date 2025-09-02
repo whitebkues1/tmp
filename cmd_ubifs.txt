@@ -69,3 +69,50 @@ demo命令
 ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
 
 dtc -I dtb -O dts -o k3-am62a7-sk.dts k3-am62a7-sk.dtb
+
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			bootph-all;
+
+			partition@0 {
+				label = "ospi_nand.tiboot3";
+				reg = <0x0 0x80000>;
+			};
+
+			partition@80000 {
+				label = "ospi_nand.tispl";
+				reg = <0x80000 0x200000>;
+			};
+
+			partition@280000 {
+				label = "ospi_nand.u-boot";
+				reg = <0x280000 0x400000>;
+			};
+
+			partition@680000 {
+				label = "ospi_nand.env";
+				reg = <0x680000 0x40000>;
+			};
+
+			partition@6c0000 {
+				label = "ospi_nand.env.backup";
+				reg = <0x6c0000 0x40000>;
+			};
+
+			partition@700000 {
+				label = "ospi_nand.kernel";
+				reg = <0x700000 0x1800000>;
+			};
+
+			partition@1f00000 {
+				label = "ospi_nand.dtb";
+				reg = <0x1f00000 0x100000>;
+			};
+
+			partition@2000000 {
+				label = "ospi_nand.rootfs";
+				reg = <0x2000000 0x1e000000>;
+			};

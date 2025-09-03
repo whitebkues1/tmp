@@ -25,6 +25,10 @@ MACHINE=am62axx-evm bitbake -c cleansstate linux-ti-staging
 MACHINE=am62axx-evm bitbake -c cleansstate u-boot-ti-staging
 u-boot命令
 
+MACHINE=am62axx-evm bitbake u-boot-ti-staging -c menuconfig
+MACHINE=am62axx-evm bitbake -c compile -f u-boot-ti-staging 
+
+
 mtd list
 mtd erase spi-nand0
 fatload mmc 1 ${loadaddr} tiboot3.bin

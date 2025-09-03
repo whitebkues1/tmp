@@ -168,3 +168,87 @@ echo "Reloading ti-v4l2-codec module..."
 modprobe ti_v4l2_codec
 
 echo "Module has been reloaded. You can now try to run the demo again."
+
+
+SRC_URI:remove:am62axx = " \
+    file://0001-arm64-dts-ti-Add-DTB-overlays-for-vision-apps-and-ed.patch \
+    file://0001-arm64-dts-ti-Add-DTB-overlay-for-vision-apps.patch \
+    file://0002-arm64-dts-ti-k3-j721s2-Add-overlay-for-edge-ai.patch \
+    file://0003-arm64-dts-ti-k3-v3link-Add-overlays-for-8x-IMX219-UB.patch \
+    file://0002-arm64-dts-ti-k3-j784s4-Add-overlay-for-edge-ai.patch \
+    file://0001-arm64-dts-ti-j722s-Add-DTB-overlay-for-RTOS-memory-m.patch \
+"
+
+IMAGE_INSTALL:append = " \
+    ti-vision-apps-dev \
+    ti-edgeai-firmware \
+    ti-tidl-dev \
+    edgeai-tiovx-kernels-dev \
+    edgeai-tiovx-kernels-source \
+    edgeai-apps-utils-source \
+    edgeai-test-data \
+    edgeai-tidl-models \
+    edgeai-tiovx-apps-dev \
+    edgeai-tiovx-apps-source \
+"
+RDEPENDS:packagegroup-arago-console:remove = " \
+    alsa-utils-aconnect \
+    alsa-utils-scripts \
+    alsa-utils-alsactl \
+    alsa-utils-alsamixer \
+    alsa-utils-amixer \
+    alsa-utils-iecset \
+    alsa-utils-midi \
+    alsa-utils-speakertest \
+    ncurses-tools \
+    e2fsprogs-e2fsck \
+    e2fsprogs-mke2fs \
+    e2fsprogs-tune2fs \
+    dosfstools \
+    util-linux-fdisk \
+    util-linux-mkfs \
+    util-linux-sfdisk \
+    util-linux-fsck \
+    less \
+    fbset \
+    usbutils \
+    i2c-tools \
+    strace \
+    ltrace \
+    alsa-conf \
+    alsa-conf-base \ 
+    alsa-server \
+    alsa-utils \
+    alsa-state \
+    avahi-utils \
+    libpng \
+    jpeg \
+    jpeg-tools \
+"
+
+RDEPENDS:packagegroup-arago-base:remove = " \
+    docker \
+    parted \
+    devmem2 \
+    tcpdump \
+    netperf \
+    iperf3 \
+    ethtool \
+    lldpd \
+    systemd-telnetd \
+    dropbear \
+    openssh-sftp-server \
+    can-utils \
+    iptables \
+    phytool \
+    nfs-utils-client \
+    cifs-utils \
+    arago-gpl-notice \
+    arago-feed-config \
+    packagegroup-base-zeroconf \
+    curl \
+    initscript-telnetd \
+    dbus-broker \
+    libasound \
+    alsa-utils-aplay \
+"

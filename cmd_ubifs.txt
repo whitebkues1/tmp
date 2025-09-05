@@ -252,3 +252,6 @@ RDEPENDS:packagegroup-arago-base:remove = " \
     libasound \
     alsa-utils-aplay \
 "
+
+
+https://e2e.ti.com/support/processors-group/processors/f/processors-forum/1480828/am62a7-error-vdec-30210000-video-codec-opp-table-not-found-in-device-tree?tisearch=e2e-sitesearch&keymatch=video-codec#

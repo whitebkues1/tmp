@@ -42,3 +42,47 @@ root@am62axx-evm:/opt/edgeai-tiovx-apps# [  360.940058] audit: type=1334 audit(4
 [  360.946452] audit: type=1334 audit(409.348:23): prog-id=20 op=UNLOAD
 [  360.952874] audit: type=1334 audit(409.348:24): prog-id=19 op=UNLOAD
 
+
+APP: Init ... !!!
+   121.628342 s: MEM: Init ... !!!
+   121.628432 s: MEM: Initialized DMA HEAP (fd=5) !!!
+   121.628693 s: MEM: Init ... Done !!!
+   121.628719 s: IPC: Init ... !!!
+   121.645670 s: IPC: Init ... Done !!!
+REMOTE_SERVICE: Init ... !!!
+REMOTE_SERVICE: Init ... Done !!!
+   121.654878 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+   121.659205 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+   121.659253 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+   121.659264 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+   121.661792 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+   121.661949 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+   121.662055 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+   121.662181 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+   121.662197 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+   121.662214 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+^C[  121.393450] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+   128.303172 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff833a6240 type:00000815 #####
+   128.303262 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff833a66a0 type:00000815 #####
+   128.303279 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff833a66a0 type:00000815 #####
+   128.303296 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff833a68d0 type:00000815 #####
+   128.303312 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff833a68d0 type:00000815 #####
+   128.303533 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff8330f150 type:0000080f #####
+   128.308128 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff8330e8e0 type:0000080f #####
+   128.311007 s:  VX_ZONE_WARNING: [vxReleaseContext:1275] Found a reference 0xffff8330e070 of type 0000080f at external count 1, internal count 0, releasing it
+   128.311047 s:  VX_ZONE_WARNING: [vxReleaseContext:1277] Releasing reference (name=image_86) now as a part of garbage collection
+APP: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... Done !!!
+   128.316413 s: IPC: Deinit ... !!!
+   128.316965 s: IPC: DeInit ... Done !!!
+   128.317011 s: MEM: Deinit ... !!!
+   128.317025 s: DDR_SHARED_MEM: Alloc's: 46 alloc's of 48288008 bytes
+   128.317036 s: DDR_SHARED_MEM: Free's : 46 free's  of 48288008 bytes
+   128.317046 s: DDR_SHARED_MEM: Open's : 0 allocs  of 0 bytes
+   128.317061 s: MEM: Deinit ... Done !!!
+APP: Deinit ... Done !!!

@@ -413,3 +413,36 @@ root@am62axx-evm:/opt/edgeai-tiovx-apps# kill -9 736
 root@am62axx-evm:/opt/edgeai-tiovx-apps# [ 1579.440508] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
 
 [2]+  Killed                  ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+
+
+############# 
+
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+APP: Init ... !!!
+  2163.922908 s: MEM: Init ... !!!
+  2163.923006 s: MEM: Initialized DMA HEAP (fd=5) !!!
+  2163.923211 s: MEM: Init ... Done !!!
+  2163.923232 s: IPC: Init ... !!!
+  2163.940356 s: IPC: Init ... Done !!!
+REMOTE_SERVICE: Init ... !!!
+REMOTE_SERVICE: Init ... Done !!!
+  2163.945394 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+  2163.945551 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+  2163.945574 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+  2163.945585 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+  2163.946563 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+  2163.946837 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+  2163.947091 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+  2163.947368 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+  2163.947406 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+  2163.947429 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+^Z
+[1]+  Stopped(SIGTSTP)        ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+root@am62axx-evm:/opt/edgeai-tiovx-apps# jobs
+[1]+  Stopped(SIGTSTP)        ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+root@am62axx-evm:/opt/edgeai-tiovx-apps# dmesg | tail -n 50
+[ 1840.290312] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800

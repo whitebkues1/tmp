@@ -3,3 +3,91 @@ https://e2e.ti.com/support/processors-group/processors/f/processors-forum/156610
 
 
 https://github.com/TexasInstruments/edgeai-tiovx-apps
+
+###########################    跑不起来的
+
+root@am62axx-evm:~#  cd /opt/edgeai-tiovx-apps/
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+APP: Init ... !!!
+   164.707108 s: MEM: Init ... !!!
+   164.707212 s: MEM: Initialized DMA HEAP (fd=5) !!!
+   164.707453 s: MEM: Init ... Done !!!
+   164.707475 s: IPC: Init ... !!!
+   164.724360 s: IPC: Init ... Done !!!
+REMOTE_SERVICE: Init ... !!!
+REMOTE_SERVICE: Init ... Done !!!
+   164.734009 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+   164.738384 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+   164.738432 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+   164.738443 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+   164.740719 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+   164.740900 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+   164.741012 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+   164.741137 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+   164.741153 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+   164.741169 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+[TIOVX_MODULES][ERROR] 519: v4l2_decode_enqueue_buf: [V4L2_DECODE] VIDIOC_QBUF failed
+[TIOVX_MODULES][ERROR] 519: v4l2_decode_enqueue_buf: [V4L2_DECODE] VIDIOC_QBUF failed
+[TIOVX_MODULES][ERROR] 519: v4l2_decode_enqueue_buf: [V4L2_DECODE] VIDIOC_QBUF failed
+[TIOVX_MODULES][ERROR] 519: v4l2_decode_enqueue_buf: [V4L2_DECODE] VIDIOC_QBUF failed
+[TIOVX_MODULES][ERROR] 519: v4l2_decode_enqueue_buf: [V4L2_DECODE] VIDIOC_QBUF failed
+[TIOVX_MODULES][ERROR] 519: v4l2_decode_enqueue_buf: [V4L2_DECODE] VIDIOC_QBUF failed
+[TIOVX_MODULES][ERROR] 519: v4l2_decode_enqueue_buf: [V4L2_DECODE] VIDIOC_QBUF failed
+[TIOVX_MODULES][ERROR] 519: v4l2_decode_enqueue_buf: [V4L2_DECODE] VIDIOC_QBUF failed
+[TIOVX_MODULES][ERROR] 519: v4l2_decode_enqueue_buf: [V4L2_DECODE] VIDIOC_QBUF failed
+[TIOVX_MODULES][ERROR] 519: v4l2_decode_enqueue_buf: [V4L2_DECODE] VIDIOC_QBUF failed
+^C[TIOVX_MODULES][ERROR] 546: v4l2_decode_dqueue_buf: [V4L2_DECODE[  164.502886] kauditd_printk_skb: 5 callbacks suppressed
+] POLL failed
+[  164.502898] audit: type=1701 audit(172.032:18): auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=630 comm="edgeai-tiovx-ap" exe="/opt/edgeai-tiovx-apps/bin/Release/edgeai-tiovx-apps-main" sig=11 res=1
+[  164.547521] audit: type=1334 audit(172.072:19): prog-id=19 op=LOAD
+[  164.553787] audit: type=1334 audit(172.080:20): prog-id=20 op=LOAD
+[  164.560013] audit: type=1334 audit(172.084:21): prog-id=21 op=LOAD
+gSegmentation fault (core dumped)
+root@am62axx-evm:/opt/edgeai-tiovx-apps# g[  165.884608] audit: type=1334 audit(173.412:22): prog-id=21 op=UNLOAD
+[  165.891003] audit: type=1334 audit(173.412:23): prog-id=20 op=UNLOAD
+[  165.897415] audit: type=1334 audit(173.412:24): prog-id=19 op=UNLOAD
+root@am62axx-evm:/opt/edgeai-tiovx-apps#
+root@am62axx-evm:/opt/edgeai-tiovx-apps# grep -H . /sys/class/video4linux/video
+video0/ video1/ video2/
+root@am62axx-evm:/opt/edgeai-tiovx-apps# grep -H . /sys/class/video4linux/video*/name
+/sys/class/video4linux/video0/name:e5010
+/sys/class/video4linux/video1/name:C&M Wave5 VPU decoder
+/sys/class/video4linux/video2/name:C&M Wave5 VPU encoder
+
+
+####################################   能跑起来的
+root@am62axx-evm:~# grep -H . /sys/class/video4linux/video*/name
+/sys/class/video4linux/video0/name:C&M Wave5 VPU decoder
+/sys/class/video4linux/video1/name:C&M Wave5 VPU encoder
+/sys/class/video4linux/video2/name:e5010
+root@am62axx-evm:~# cd /opt/edgeai-tiovx-apps/
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+APP: Init ... !!!
+   438.579871 s: MEM: Init ... !!!
+   438.579972 s: MEM: Initialized DMA HEAP (fd=5) !!!
+   438.580212 s: MEM: Init ... Done !!!
+   438.580234 s: IPC: Init ... !!!
+   438.597354 s: IPC: Init ... Done !!!
+REMOTE_SERVICE: Init ... !!!
+REMOTE_SERVICE: Init ... Done !!!
+   438.608184 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+   438.612462 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+   438.612497 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+   438.612508 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+   438.614832 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+   438.614992 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+   438.615118 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+   438.615249 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+   438.615267 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+   438.615283 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+^Z
+[1]+  Stopped(SIGTSTP)        ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+root@am62axx-evm:/opt/edgeai-tiovx-apps#

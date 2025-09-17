@@ -382,3 +382,16 @@ int32_t parse_input_node(InputInfo *input_info, const YAML::Node &input_node)
     return 0;
 }
 
+
+##############
+root@am62axx-evm:/opt/edgeai-tiovx-apps# mount --bind /dev/video1
+mount: /dev/video1: mount failed: Invalid argument.
+root@am62axx-evm:/opt/edgeai-tiovx-apps# mount -bind /dev/video1
+mount: invalid option -- 'b'
+Try 'mount --help' for more information.
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ls /dev/video*
+/dev/video0  /dev/video1  /dev/video2
+root@am62axx-evm:/opt/edgeai-tiovx-apps# mount -o -bind /dev/video1 /dev/video0
+mount: /dev/video0: /dev/video1 is not a block device.
+       dmesg(1) may have more information after failed mount system call.
+

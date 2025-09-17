@@ -395,3 +395,21 @@ root@am62axx-evm:/opt/edgeai-tiovx-apps# mount -o -bind /dev/video1 /dev/video0
 mount: /dev/video0: /dev/video1 is not a block device.
        dmesg(1) may have more information after failed mount system call.
 
+
+
+###################### 
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ps | grep edgeai
+  700 root      492m T    ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+  736 root      492m S    ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+  748 root      3496 S    grep edgeai
+root@am62axx-evm:/opt/edgeai-tiovx-apps# kill -9 700
+root@am62axx-evm:/opt/edgeai-tiovx-apps# [ 1561.388204] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+
+[1]+  Killed                  ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ps | grep edgeai
+  736 root      492m S    ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+  751 root      3496 S    grep edgeai
+root@am62axx-evm:/opt/edgeai-tiovx-apps# kill -9 736
+root@am62axx-evm:/opt/edgeai-tiovx-apps# [ 1579.440508] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+
+[2]+  Killed                  ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml

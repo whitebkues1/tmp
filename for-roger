@@ -91,3 +91,58 @@ Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
 ^Z
 [1]+  Stopped(SIGTSTP)        ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
 root@am62axx-evm:/opt/edgeai-tiovx-apps#
+
+
+############### 修改的yaml
+root@am62axx-evm:/opt/edgeai-tiovx-apps# vi configs/linux/object_detection.yaml
+title: Object Detection
+inputs:
+    input0:
+        source: VIDEO
+        width: 1280
+        height: 768
+        device: /dev/video1
+        video_path: /opt/edgeai-test-data/videos/video0_1280_768.h264
+models:
+    model0:
+        model_path: /opt/model_zoo/TFL-OD-2020-ssdLite-mobDet-DSP-coco-320x320
+        viz-threshold: 0.6
+    model1:
+        model_path: /opt/model_zoo/ONR-OD-8200-yolox-nano-lite-mmdet-coco-416x416
+        viz-threshold: 0.6
+outputs:
+    output0:
+        sink: LINUX_DISPLAY
+        width: 1920
+        height: 1080
+    output1:
+        sink: H264_ENCODE
+        width: 1920
+        height: 1088
+        output_path: /opt/edgeai-test-data/output/output_video0.h264
+    output2:
+        sink: IMG_DIR
+        width: 1920
+        height: 1080
+        output_path: /opt/edgeai-test-data/output/
+flows:
+    flow0:
+        pipeline: [input0,model1,output0]
+        mosaic:
+            - [320,150,1280,720]
+
+
+################## 报错
+terminate called after throwing an instance of '[  107.322530] kauditd_printk_skb: 5 callbacks suppressed
+YAML::ParserException'
+  what():  yaml-cpp: error at line 7, co[  107.322540] audit: type=1701 audit(114.736:18): auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=630 comm="edgeai-tiovx-ap" exe="/opt/edgeai-tiovx-apps/bin/Release/edgeai-tiovx-apps-main" sig=6 res=1
+lumn 1: illegal tab when looking for indentation
+[  107.357472] audit: type=1334 audit(114.772:19): prog-id=19 op=LOAD
+[  107.364375] audit: type=1334 audit(114.776:20): prog-id=20 op=LOAD
+[  107.370609] audit: type=1334 audit(114.784:21): prog-id=21 op=LOAD
+Aborted (core dumped)
+root@am62axx-evm:/opt/edgeai-tiovx-apps# [  108.172592] audit: type=1334 audit(115.588:22): prog-id=21 op=UNLOAD
+[  108.178982] audit: type=1334 audit(115.588:23): prog-id=20 op=UNLOAD
+[  108.185348] audit: type=1334 audit(115.588:24): prog-id=19 op=UNLOAD
+^C
+

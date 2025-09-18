@@ -1707,3 +1707,100 @@ root@am62axx-evm:/opt/edgeai-tiovx-apps# tail -n 50 /tmp/dmesg.log
 [1]+  Terminated              dmesg -T -w > /tmp/dmesg.log  (wd: ~)
 (wd now: /opt/edgeai-tiovx-apps)
 root@am62axx-evm:/opt/edgeai-tiovx-apps#
+
+################### 添加decode_only.yaml
+root@am62axx-evm:/opt/edgeai-tiovx-apps# mkdir -p /run/edgeai-out
+root@am62axx-evm:/opt/edgeai-tiovx-apps# vi configs/linux/decode_only.yaml
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ps | grep edgeai
+  738 root      3496 S    grep edgeai
+root@am62axx-evm:/opt/edgeai-tiovx-apps# grep -H . /sys/class/video4linux/video*/name
+/sys/class/video4linux/video0/name:e5010
+/sys/class/video4linux/video1/name:C&M Wave5 VPU decoder
+/sys/class/video4linux/video2/name:C&M Wave5 VPU encoder
+root@am62axx-evm:/opt/edgeai-tiovx-apps# dmesg -T -w > /tmp/dmesg.log & echo $! > /tmp/dmesg.pid
+[1] 741
+root@am62axx-evm:/opt/edgeai-tiovx-apps# timeout -s INT -k 5s 20s ./bin/Release/edgeai-tiovx-apps-main -v configs/linux/decode_only.yaml
+APP: Init ... !!!
+  1322.007768 s: MEM: Init ... !!!
+  1322.007864 s: MEM: Initialized DMA HEAP (fd=5) !!!
+  1322.008059 s: MEM: Init ... Done !!!
+  1322.008080 s: IPC: Init ... !!!
+_rpmsg_char_find_ctrldev: could not find the matching rpmsg_ctrl device for virtio2.rpmsg_chrdev.-1.13
+  1322.023951 s: IPC: ERROR: Unable to create TX channels for CPU [c7x_1] !!!
+  1322.023971 s: IPC: Init ... Done !!!
+APP: ERROR: IPC init failed !!!
+REMOTE_SERVICE: Init ... !!!
+_rpmsg_char_find_ctrldev: could not find the matching rpmsg_ctrl device for virtio0.rpmsg_chrdev.-1.21
+_rpmsg_char_find_ctrldev: could not find the matching rpmsg_ctrl device for virtio2.rpmsg_chrdev.-1.21
+REMOTE_SERVICE: Init ... Done !!!
+  1322.026068 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+  1322.026203 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+  1322.026217 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+  1322.026227 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+  1322.027165 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+  1322.027387 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+  1322.027538 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+  1322.027647 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+  1322.027664 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+  1322.027684 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+[ 1329.178949] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+Killed
+root@am62axx-evm:/opt/edgeai-tiovx-apps# kill "$(cat /tmp/dmesg.pid)"
+root@am62axx-evm:/opt/edgeai-tiovx-apps#  tail -n 50 /tmp/dmesg.log
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc2: remote processor 78000000.r5f is now attached
+[Thu Jan  1 00:00:44 1970] rtc-ti-k3 2b1f0000.rtc: registered as rtc0
+[Thu Jan  1 00:00:44 1970] rtc-ti-k3 2b1f0000.rtc: setting system clock to 1970-01-01T00:00:44 UTC (44)
+[Thu Jan  1 00:00:44 1970] systemd-journald[116]: Time jumped backwards, rotating.
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc1: powering up 79000000.r5f
+[Thu Jan  1 00:00:45 1970] remoteproc remoteproc1: Booting fw image am62a-mcu-r5f0_0-fw, size 53172
+[Thu Jan  1 00:00:45 1970] rproc-virtio rproc-virtio.9.auto: assigned reserved memory node r5f-dma-memory@9b800000
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: rpmsg host is online
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: creating channel ti.ipc4.ping-pong addr 0xd
+[Thu Jan  1 00:00:45 1970] rproc-virtio rproc-virtio.9.auto: registered virtio1 (type 7)
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: creating channel rpmsg_chrdev addr 0xe
+[Thu Jan  1 00:00:45 1970] remoteproc remoteproc1: remote processor 79000000.r5f is now up
+[Thu Jan  1 00:00:46 1970] videodev: Linux video capture interface: v2.00
+[Thu Jan  1 00:00:46 1970] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[Thu Jan  1 00:00:46 1970] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[Thu Jan  1 00:00:46 1970] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[Thu Jan  1 00:00:46 1970] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+[Thu Jan  1 00:00:46 1970] cfg80211: failed to load regulatory.db
+[Thu Jan  1 00:00:47 1970] mtdblock: MTD device 'ospi_nand.dtb' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:47 1970] e5010 fd20000.jpeg-encoder: Device registered as /dev/video0
+[Thu Jan  1 00:00:48 1970] mtdblock: MTD device 'ospi_nand.env.backup' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: error -ENXIO: IRQ index 0 not found
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: failed to get irq resource, falling back to polling
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: OPP table not found in device tree
+[Thu Jan  1 00:00:48 1970] mtdblock: MTD device 'ospi_nand.u-boot' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:49 1970] mtdblock: MTD device 'ospi_nand.tiboot3' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:50 1970] am65-cpsw-nuss 8000000.ethernet eth0: PHY [8000f00.mdio:00] driver [TI DP83867] (irq=POLL)
+[Thu Jan  1 00:00:50 1970] am65-cpsw-nuss 8000000.ethernet eth0: configuring for phy/rgmii-rxid link mode
+[Thu Jan  1 00:00:50 1970] mtdblock: MTD device 'ospi_nand.rootfs' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:50 1970] mtdblock: MTD device 'ospi_nand.kernel' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Added wave5 driver with caps: 'ENCODE' 'DECODE'
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Product Code:      0x521c
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Firmware Revision: 334314
+[Thu Jan  1 00:00:53 1970] mtdblock: MTD device 'ospi_nand.env' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:53 1970] mtdblock: MTD device 'ospi_nand.tispl' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:55 1970] mtdblock: MTD device 'ospi_nand.rootfs' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:57 1970] FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[Thu Jan  1 00:00:57 1970] FAT-fs (mmcblk1p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[Thu Jan  1 00:00:58 1970] EXT4-fs (mmcblk1p2): mounting ext3 file system using the ext4 subsystem
+[Thu Jan  1 00:00:58 1970] EXT4-fs (mmcblk1p2): mounted filesystem 54efb1d1-9ee3-469f-9ea4-b968ac69f78f r/w with ordered data mode. Quota mode: none.
+[Thu Jan  1 00:01:01 1970] remoteproc remoteproc0: powering up 7e000000.dsp
+[Thu Jan  1 00:01:01 1970] remoteproc remoteproc0: Booting fw image am62a-c71_0-fw, size 10719312
+[Thu Jan  1 00:01:01 1970] k3-dsp-rproc 7e000000.dsp: booting DSP core using boot addr = 0x99a00000
+[Thu Jan  1 00:01:01 1970] rproc-virtio rproc-virtio.10.auto: assigned reserved memory node c7x-dma-memory@99800000
+[Thu Jan  1 00:01:01 1970] virtio_rpmsg_bus virtio2: rpmsg host is online
+[Thu Jan  1 00:01:01 1970] rproc-virtio rproc-virtio.10.auto: registered virtio2 (type 7)
+[Thu Jan  1 00:01:02 1970] remoteproc remoteproc0: remote processor 7e000000.dsp is now up
+[Thu Jan  1 00:05:11 1970] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+[Thu Jan  1 00:09:11 1970] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+[Thu Jan  1 00:22:28 1970] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+[1]+  Terminated              dmesg -T -w > /tmp/dmesg.log
+root@am62axx-evm:/opt/edgeai-tiovx-apps#
+

@@ -446,3 +446,8 @@ root@am62axx-evm:/opt/edgeai-tiovx-apps# jobs
 [1]+  Stopped(SIGTSTP)        ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
 root@am62axx-evm:/opt/edgeai-tiovx-apps# dmesg | tail -n 50
 [ 1840.290312] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+
+################## 
+
+root@am62axx-evm:~# timeout -s INT 15s gst-launch-1.0 -e filesrc location=/opt/edgeai-test-data/videos/video0_1280_768.h264 ! h264parse ! v4l2h264dec ! fakesync=false
+timeout: can't execute 'gst-launch-1.0': No such file or directory

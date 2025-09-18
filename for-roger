@@ -1097,3 +1097,511 @@ root@am62axx-evm:/opt/edgeai-tiovx-apps# tail -n 200 /tmp/dmesg.log
 [1]+  Terminated              dmesg -T -w > /tmp/dmesg.log  (wd: ~)
 (wd now: /opt/edgeai-tiovx-apps)
 root@am62axx-evm:/opt/edgeai-tiovx-apps#
+
+
+
+########################## 14：17
+root@am62axx-evm:~# grep -H . /sys/class/video4linux/video*/name
+/sys/class/video4linux/video0/name:C&M Wave5 VPU decoder
+/sys/class/video4linux/video1/name:C&M Wave5 VPU encoder
+/sys/class/video4linux/video2/name:e5010
+root@am62axx-evm:~#
+root@am62axx-evm:~#
+root@am62axx-evm:~# readlink -f /sys/class/video4linux/video0/device
+/sys/devices/platform/bus@f0000/30210000.video-codec
+root@am62axx-evm:~# echo 30210000.video-codec > /sys/bus/platform/drivers/vdec/unbind
+[  227.449143] vdec 30210000.video-codec: Runtime PM usage count underflow!
+root@am62axx-evm:~# sleep 1
+root@am62axx-evm:~# echo 30210000.video-codec > /sys/bus/platform/drivers/vdec/bind
+[  237.990106] vdec 30210000.video-codec: error -ENXIO: IRQ index 0 not found
+[  237.997021] vdec 30210000.video-codec: failed to get irq resource, falling back to polling
+[  238.005520] vdec 30210000.video-codec: OPP table not found in device tree
+[  238.015169] vdec 30210000.video-codec: Added wave5 driver with caps: 'ENCODE' 'DECODE'
+[  238.023178] vdec 30210000.video-codec: Product Code:      0x521c
+[  238.029241] vdec 30210000.video-codec: Firmware Revision: 334314
+root@am62axx-evm:~# grep -H . /sys/class/video4linux/video*/name
+/sys/class/video4linux/video0/name:C&M Wave5 VPU decoder
+/sys/class/video4linux/video1/name:C&M Wave5 VPU encoder
+/sys/class/video4linux/video2/name:e5010
+root@am62axx-evm:~# dmesg -T -w > /tmp/dmesg.log & echo $! > /tmp/dmesg.pid
+[1] 564
+root@am62axx-evm:~# cd /opt/edgeai-tiovx-apps/
+root@am62axx-evm:/opt/edgeai-tiovx-apps# timeout -s INT -k 5s 20s ./bin/Release/edgeai-tiovx-apps-main -v configs/linux/object_detection.yaml
+APP: Init ... !!!
+   270.613111 s: MEM: Init ... !!!
+   270.613227 s: MEM: Initialized DMA HEAP (fd=5) !!!
+   270.613465 s: MEM: Init ... Done !!!
+   270.613487 s: IPC: Init ... !!!
+   270.630489 s: IPC: Init ... Done !!!
+REMOTE_SERVICE: Init ... !!!
+REMOTE_SERVICE: Init ... Done !!!
+   270.642486 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+   270.646763 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+   270.646802 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+   270.646813 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+   270.649125 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+   270.649265 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+   270.649395 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+   270.649527 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+   270.649543 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+   270.649560 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.16
+CPU: mcu1_0: TOTAL LOAD = 12.85
+CPU:  c7x_1: TOTAL LOAD = 51.21
+HWA:   MSC0: LOAD = 53.44 % ( 159 MP/s )
+HWA:   MSC1: LOAD = 22.17 % ( 42 MP/s )
+DDR: READ  BW: AVG =   1472 MB/s, PEAK =   1472 MB/s
+DDR: WRITE BW: AVG =    714 MB/s, PEAK =    714 MB/s
+DDR: TOTAL BW: AVG =   2186 MB/s, PEAK =   2186 MB/s
+TEMP: thermal_zone0(DDR) = 42.23 C
+TEMP: thermal_zone1(CPU) = 41.31 C
+TEMP: thermal_zone2(C7x) = 34.74 C
+FPS: 52
+
+tidl_node - 9.033 ms
+
+Graph - 28.029 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.65
+CPU: mcu1_0: TOTAL LOAD = 3.27
+CPU:  c7x_1: TOTAL LOAD = 54.70
+HWA:   MSC0: LOAD = 52.01 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 23.70 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1546 MB/s, PEAK =   1546 MB/s
+DDR: WRITE BW: AVG =    744 MB/s, PEAK =    744 MB/s
+DDR: TOTAL BW: AVG =   2290 MB/s, PEAK =   2290 MB/s
+TEMP: thermal_zone0(DDR) = 42.46 C
+TEMP: thermal_zone1(CPU) = 41.31 C
+TEMP: thermal_zone2(C7x) = 35.21 C
+FPS: 60
+
+tidl_node - 9.018 ms
+
+Graph - 26.170 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.79
+CPU: mcu1_0: TOTAL LOAD = 3.21
+CPU:  c7x_1: TOTAL LOAD = 54.48
+HWA:   MSC0: LOAD = 54.64 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 24.12 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1550 MB/s, PEAK =   1550 MB/s
+DDR: WRITE BW: AVG =    745 MB/s, PEAK =    745 MB/s
+DDR: TOTAL BW: AVG =   2295 MB/s, PEAK =   2295 MB/s
+TEMP: thermal_zone0(DDR) = 42.92 C
+TEMP: thermal_zone1(CPU) = 41.77 C
+TEMP: thermal_zone2(C7x) = 35.69 C
+FPS: 60
+
+tidl_node - 9.000 ms
+
+Graph - 25.465 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.62
+CPU: mcu1_0: TOTAL LOAD = 3.40
+CPU:  c7x_1: TOTAL LOAD = 54.66
+HWA:   MSC0: LOAD = 54.27 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 24.14 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1546 MB/s, PEAK =   1546 MB/s
+DDR: WRITE BW: AVG =    742 MB/s, PEAK =    742 MB/s
+DDR: TOTAL BW: AVG =   2288 MB/s, PEAK =   2288 MB/s
+TEMP: thermal_zone0(DDR) = 42.69 C
+TEMP: thermal_zone1(CPU) = 42.00 C
+TEMP: thermal_zone2(C7x) = 35.21 C
+FPS: 60
+
+tidl_node - 9.000 ms
+
+Graph - 25.150 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.38
+CPU: mcu1_0: TOTAL LOAD = 3.39
+CPU:  c7x_1: TOTAL LOAD = 54.46
+HWA:   MSC0: LOAD = 55.99 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 24.26 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1534 MB/s, PEAK =   1534 MB/s
+DDR: WRITE BW: AVG =    740 MB/s, PEAK =    740 MB/s
+DDR: TOTAL BW: AVG =   2274 MB/s, PEAK =   2274 MB/s
+TEMP: thermal_zone0(DDR) = 43.15 C
+TEMP: thermal_zone1(CPU) = 42.00 C
+TEMP: thermal_zone2(C7x) = 36.63 C
+FPS: 60
+
+tidl_node - 8.998 ms
+
+Graph - 24.891 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.42
+CPU: mcu1_0: TOTAL LOAD = 3.50
+CPU:  c7x_1: TOTAL LOAD = 54.95
+HWA:   MSC0: LOAD = 53.67 % ( 171 MP/s )
+HWA:   MSC1: LOAD = 24.19 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1552 MB/s, PEAK =   1552 MB/s
+DDR: WRITE BW: AVG =    743 MB/s, PEAK =    743 MB/s
+DDR: TOTAL BW: AVG =   2295 MB/s, PEAK =   2295 MB/s
+TEMP: thermal_zone0(DDR) = 42.69 C
+TEMP: thermal_zone1(CPU) = 41.77 C
+TEMP: thermal_zone2(C7x) = 35.92 C
+FPS: 60
+
+tidl_node - 9.001 ms
+
+Graph - 24.816 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.54
+CPU: mcu1_0: TOTAL LOAD = 3.24
+CPU:  c7x_1: TOTAL LOAD = 54.60
+HWA:   MSC0: LOAD = 53.54 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 24.21 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1541 MB/s, PEAK =   1541 MB/s
+DDR: WRITE BW: AVG =    741 MB/s, PEAK =    741 MB/s
+DDR: TOTAL BW: AVG =   2282 MB/s, PEAK =   2282 MB/s
+TEMP: thermal_zone0(DDR) = 42.69 C
+TEMP: thermal_zone1(CPU) = 41.77 C
+TEMP: thermal_zone2(C7x) = 35.92 C
+FPS: 60
+
+tidl_node - 9.004 ms
+
+Graph - 24.753 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.62
+CPU: mcu1_0: TOTAL LOAD = 3.25
+CPU:  c7x_1: TOTAL LOAD = 54.77
+HWA:   MSC0: LOAD = 55.40 % ( 171 MP/s )
+HWA:   MSC1: LOAD = 24.20 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1556 MB/s, PEAK =   1556 MB/s
+DDR: WRITE BW: AVG =    745 MB/s, PEAK =    745 MB/s
+DDR: TOTAL BW: AVG =   2301 MB/s, PEAK =   2301 MB/s
+TEMP: thermal_zone0(DDR) = 42.92 C
+TEMP: thermal_zone1(CPU) = 42.23 C
+TEMP: thermal_zone2(C7x) = 36.40 C
+FPS: 60
+
+tidl_node - 9.002 ms
+
+Graph - 24.667 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.09
+CPU: mcu1_0: TOTAL LOAD = 3.19
+CPU:  c7x_1: TOTAL LOAD = 54.52
+HWA:   MSC0: LOAD = 55.37 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 24.26 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1537 MB/s, PEAK =   1537 MB/s
+DDR: WRITE BW: AVG =    741 MB/s, PEAK =    741 MB/s
+DDR: TOTAL BW: AVG =   2278 MB/s, PEAK =   2278 MB/s
+TEMP: thermal_zone0(DDR) = 43.61 C
+TEMP: thermal_zone1(CPU) = 42.23 C
+TEMP: thermal_zone2(C7x) = 36.40 C
+FPS: 60
+
+tidl_node - 9.002 ms
+
+Graph - 24.595 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.62
+CPU: mcu1_0: TOTAL LOAD = 3.28
+CPU:  c7x_1: TOTAL LOAD = 54.78
+HWA:   MSC0: LOAD = 55.50 % ( 171 MP/s )
+HWA:   MSC1: LOAD = 24.22 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1547 MB/s, PEAK =   1547 MB/s
+DDR: WRITE BW: AVG =    742 MB/s, PEAK =    742 MB/s
+DDR: TOTAL BW: AVG =   2289 MB/s, PEAK =   2289 MB/s
+TEMP: thermal_zone0(DDR) = 44.07 C
+TEMP: thermal_zone1(CPU) = 42.23 C
+TEMP: thermal_zone2(C7x) = 36.63 C
+FPS: 60
+
+tidl_node - 9.001 ms
+
+Graph - 24.541 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.85
+CPU: mcu1_0: TOTAL LOAD = 3.33
+CPU:  c7x_1: TOTAL LOAD = 54.71
+HWA:   MSC0: LOAD = 53.18 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 24.11 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1541 MB/s, PEAK =   1541 MB/s
+DDR: WRITE BW: AVG =    742 MB/s, PEAK =    742 MB/s
+DDR: TOTAL BW: AVG =   2283 MB/s, PEAK =   2283 MB/s
+TEMP: thermal_zone0(DDR) = 43.38 C
+TEMP: thermal_zone1(CPU) = 42.69 C
+TEMP: thermal_zone2(C7x) = 36.16 C
+FPS: 60
+
+tidl_node - 9.002 ms
+
+Graph - 24.534 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 10.07
+CPU: mcu1_0: TOTAL LOAD = 3.31
+CPU:  c7x_1: TOTAL LOAD = 54.73
+HWA:   MSC0: LOAD = 53.54 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 24.13 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1544 MB/s, PEAK =   1544 MB/s
+DDR: WRITE BW: AVG =    741 MB/s, PEAK =    741 MB/s
+DDR: TOTAL BW: AVG =   2285 MB/s, PEAK =   2285 MB/s
+TEMP: thermal_zone0(DDR) = 43.38 C
+TEMP: thermal_zone1(CPU) = 42.23 C
+TEMP: thermal_zone2(C7x) = 35.92 C
+FPS: 60
+
+tidl_node - 9.002 ms
+
+Graph - 24.522 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 8.62
+CPU: mcu1_0: TOTAL LOAD = 3.41
+CPU:  c7x_1: TOTAL LOAD = 54.48
+HWA:   MSC0: LOAD = 56.46 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 23.86 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1538 MB/s, PEAK =   1538 MB/s
+DDR: WRITE BW: AVG =    743 MB/s, PEAK =    743 MB/s
+DDR: TOTAL BW: AVG =   2281 MB/s, PEAK =   2281 MB/s
+TEMP: thermal_zone0(DDR) = 43.15 C
+TEMP: thermal_zone1(CPU) = 42.46 C
+TEMP: thermal_zone2(C7x) = 36.40 C
+FPS: 60
+
+tidl_node - 9.002 ms
+
+Graph - 24.461 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 10.12
+CPU: mcu1_0: TOTAL LOAD = 3.50
+CPU:  c7x_1: TOTAL LOAD = 54.87
+HWA:   MSC0: LOAD = 55.10 % ( 171 MP/s )
+HWA:   MSC1: LOAD = 24.20 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1558 MB/s, PEAK =   1558 MB/s
+DDR: WRITE BW: AVG =    744 MB/s, PEAK =    744 MB/s
+DDR: TOTAL BW: AVG =   2302 MB/s, PEAK =   2302 MB/s
+TEMP: thermal_zone0(DDR) = 43.84 C
+TEMP: thermal_zone1(CPU) = 42.00 C
+TEMP: thermal_zone2(C7x) = 37.10 C
+FPS: 60
+
+tidl_node - 9.002 ms
+
+Graph - 24.440 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.31
+CPU: mcu1_0: TOTAL LOAD = 3.23
+CPU:  c7x_1: TOTAL LOAD = 54.37
+HWA:   MSC0: LOAD = 54.33 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 23.85 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1530 MB/s, PEAK =   1530 MB/s
+DDR: WRITE BW: AVG =    741 MB/s, PEAK =    741 MB/s
+DDR: TOTAL BW: AVG =   2271 MB/s, PEAK =   2271 MB/s
+TEMP: thermal_zone0(DDR) = 43.38 C
+TEMP: thermal_zone1(CPU) = 42.23 C
+TEMP: thermal_zone2(C7x) = 36.63 C
+FPS: 60
+
+tidl_node - 9.001 ms
+
+Graph - 24.421 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.18
+CPU: mcu1_0: TOTAL LOAD = 3.88
+CPU:  c7x_1: TOTAL LOAD = 54.98
+HWA:   MSC0: LOAD = 53.73 % ( 171 MP/s )
+HWA:   MSC1: LOAD = 23.79 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1548 MB/s, PEAK =   1548 MB/s
+DDR: WRITE BW: AVG =    743 MB/s, PEAK =    743 MB/s
+DDR: TOTAL BW: AVG =   2291 MB/s, PEAK =   2291 MB/s
+TEMP: thermal_zone0(DDR) = 43.38 C
+TEMP: thermal_zone1(CPU) = 42.92 C
+TEMP: thermal_zone2(C7x) = 37.34 C
+FPS: 60
+
+tidl_node - 9.002 ms
+
+Graph - 24.420 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.77
+CPU: mcu1_0: TOTAL LOAD = 3.41
+CPU:  c7x_1: TOTAL LOAD = 54.56
+HWA:   MSC0: LOAD = 54.26 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 24.23 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1539 MB/s, PEAK =   1539 MB/s
+DDR: WRITE BW: AVG =    740 MB/s, PEAK =    740 MB/s
+DDR: TOTAL BW: AVG =   2279 MB/s, PEAK =   2279 MB/s
+TEMP: thermal_zone0(DDR) = 43.38 C
+TEMP: thermal_zone1(CPU) = 42.46 C
+TEMP: thermal_zone2(C7x) = 37.58 C
+FPS: 60
+
+tidl_node - 9.003 ms
+
+Graph - 24.409 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 9.62
+CPU: mcu1_0: TOTAL LOAD = 3.78
+CPU:  c7x_1: TOTAL LOAD = 54.76
+HWA:   MSC0: LOAD = 55.39 % ( 171 MP/s )
+HWA:   MSC1: LOAD = 23.82 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1553 MB/s, PEAK =   1553 MB/s
+DDR: WRITE BW: AVG =    745 MB/s, PEAK =    745 MB/s
+DDR: TOTAL BW: AVG =   2298 MB/s, PEAK =   2298 MB/s
+TEMP: thermal_zone0(DDR) = 44.07 C
+TEMP: thermal_zone1(CPU) = 42.46 C
+TEMP: thermal_zone2(C7x) = 37.34 C
+FPS: 60
+
+tidl_node - 9.002 ms
+
+Graph - 24.387 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 8.86
+CPU: mcu1_0: TOTAL LOAD = 3.07
+CPU:  c7x_1: TOTAL LOAD = 54.55
+HWA:   MSC0: LOAD = 57.18 % ( 170 MP/s )
+HWA:   MSC1: LOAD = 24.66 % ( 45 MP/s )
+DDR: READ  BW: AVG =   1536 MB/s, PEAK =   1536 MB/s
+DDR: WRITE BW: AVG =    740 MB/s, PEAK =    740 MB/s
+DDR: TOTAL BW: AVG =   2276 MB/s, PEAK =   2276 MB/s
+TEMP: thermal_zone0(DDR) = 44.07 C
+TEMP: thermal_zone1(CPU) = 42.92 C
+TEMP: thermal_zone2(C7x) = 36.63 C
+FPS: 60
+
+tidl_node - 9.002 ms
+
+Graph - 24.352 ms
+================================================
+
+[  283.516987] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+   290.439166 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff9d446240 type:00000815 #####
+   290.439284 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff9d4466a0 type:00000815 #####
+   290.439302 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff9d4466a0 type:00000815 #####
+   290.439319 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff9d4468d0 type:00000815 #####
+   290.439334 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff9d4468d0 type:00000815 #####
+   290.439573 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff9d3af150 type:0000080f #####
+   290.444239 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff9d3ae8e0 type:0000080f #####
+   290.447219 s:  VX_ZONE_WARNING: [vxReleaseContext:1275] Found a reference 0xffff9d3ae070 of type 0000080f at external count 1, internal count 0, releasing it
+   290.447258 s:  VX_ZONE_WARNING: [vxReleaseContext:1277] Releasing reference (name=image_86) now as a part of garbage collection
+APP: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... Done !!!
+   290.452716 s: IPC: Deinit ... !!!
+   290.453378 s: IPC: DeInit ... Done !!!
+   290.453426 s: MEM: Deinit ... !!!
+   290.453440 s: DDR_SHARED_MEM: Alloc's: 46 alloc's of 48288008 bytes
+   290.453452 s: DDR_SHARED_MEM: Free's : 46 free's  of 48288008 bytes
+   290.453461 s: DDR_SHARED_MEM: Open's : 0 allocs  of 0 bytes
+   290.453478 s: MEM: Deinit ... Done !!!
+APP: Deinit ... Done !!!
+root@am62axx-evm:/opt/edgeai-tiovx-apps# kill "$(cat /tmp/dmesg.pid)"
+root@am62axx-evm:/opt/edgeai-tiovx-apps# tail -n 50 /tmp/dmesg.log
+[Thu Jan  1 00:00:13 1970] remoteproc remoteproc1: remote processor 79000000.r5f is now up
+[Thu Jan  1 00:00:13 1970] remoteproc remoteproc0: powering up 7e000000.dsp
+[Thu Jan  1 00:00:13 1970] i2c i2c-1: Added multiplexed i2c bus 3
+[Thu Jan  1 00:00:13 1970] virtio_rpmsg_bus virtio0: rpmsg host is online
+[Thu Jan  1 00:00:13 1970] virtio_rpmsg_bus virtio0: creating channel rpmsg_chrdev addr 0xd
+[Thu Jan  1 00:00:13 1970] remoteproc remoteproc0: Booting fw image am62a-c71_0-fw, size 10719312
+[Thu Jan  1 00:00:13 1970] rproc-virtio rproc-virtio.7.auto: registered virtio0 (type 7)
+[Thu Jan  1 00:00:13 1970] [drm] Initialized tidss 1.0.0 20180215 for 30200000.dss on minor 0
+[Thu Jan  1 00:00:13 1970] remoteproc remoteproc2: remote processor 78000000.r5f is now attached
+[Thu Jan  1 00:00:13 1970] k3-dsp-rproc 7e000000.dsp: booting DSP core using boot addr = 0x99a00000
+[Thu Jan  1 00:00:14 1970] rproc-virtio rproc-virtio.10.auto: assigned reserved memory node c7x-dma-memory@99800000
+[Thu Jan  1 00:00:14 1970] virtio_rpmsg_bus virtio2: rpmsg host is online
+[Thu Jan  1 00:00:14 1970] virtio_rpmsg_bus virtio2: creating channel rpmsg_chrdev addr 0xd
+[Thu Jan  1 00:00:14 1970] rproc-virtio rproc-virtio.10.auto: registered virtio2 (type 7)
+[Thu Jan  1 00:00:14 1970] virtio_rpmsg_bus virtio2: creating channel rpmsg_chrdev addr 0x15
+[Thu Jan  1 00:00:14 1970] remoteproc remoteproc0: remote processor 7e000000.dsp is now up
+[Thu Jan  1 00:00:14 1970] virtio_rpmsg_bus virtio2: creating channel ti.ipc4.ping-pong addr 0xe
+[Thu Jan  1 00:00:14 1970] virtio_rpmsg_bus virtio2: msg received with no recipient
+[Thu Jan  1 00:00:14 1970] virtio_rpmsg_bus virtio0: creating channel rpmsg_chrdev addr 0x15
+[Thu Jan  1 00:00:14 1970] virtio_rpmsg_bus virtio0: creating channel ti.ipc4.ping-pong addr 0xe
+[Thu Jan  1 00:00:14 1970] virtio_rpmsg_bus virtio0: msg received with no recipient
+[Thu Jan  1 00:00:14 1970] Console: switching to colour frame buffer device 240x67
+[Thu Jan  1 00:00:14 1970] vdec 30210000.video-codec: error -ENXIO: IRQ index 0 not found
+[Thu Jan  1 00:00:14 1970] vdec 30210000.video-codec: failed to get irq resource, falling back to polling
+[Thu Jan  1 00:00:14 1970] vdec 30210000.video-codec: OPP table not found in device tree
+[Thu Jan  1 00:00:14 1970] tidss 30200000.dss: [drm] fb0: tidssdrmfb frame buffer device
+[Thu Jan  1 00:00:14 1970] e5010 fd20000.jpeg-encoder: Device registered as /dev/video2
+[Thu Jan  1 00:00:14 1970] vdec 30210000.video-codec: Added wave5 driver with caps: 'ENCODE' 'DECODE'
+[Thu Jan  1 00:00:14 1970] vdec 30210000.video-codec: Product Code:      0x521c
+[Thu Jan  1 00:00:14 1970] vdec 30210000.video-codec: Firmware Revision: 334314
+[Thu Jan  1 00:00:14 1970] FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[Thu Jan  1 00:00:14 1970] FAT-fs (mmcblk1p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[Thu Jan  1 00:00:18 1970] audit: type=1006 audit(18.168:13): pid=532 uid=0 subj=kernel old-auid=4294967295 auid=0 tty=(none) old-ses=4294967295 ses=1 res=1
+[Thu Jan  1 00:00:18 1970] audit: type=1300 audit(18.168:13): arch=c00000b7 syscall=64 success=yes exit=1 a0=8 a1=fffff284ec48 a2=1 a3=1 items=0 ppid=1 pid=532 auid=0 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=1 comm="(systemd)" exe="/usr/lib/systemd/systemd-executor" subj=kernel key=(null)
+[Thu Jan  1 00:00:18 1970] audit: type=1327 audit(18.168:13): proctitle="(systemd)"
+[Thu Jan  1 00:00:18 1970] audit: type=1334 audit(18.184:14): prog-id=17 op=LOAD
+[Thu Jan  1 00:00:18 1970] audit: type=1300 audit(18.184:14): arch=c00000b7 syscall=280 success=yes exit=8 a0=5 a1=ffffd1c824f8 a2=90 a3=0 items=0 ppid=1 pid=532 auid=0 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=1 comm="systemd" exe="/usr/lib/systemd/systemd" subj=kernel key=(null)
+[Thu Jan  1 00:00:18 1970] audit: type=1327 audit(18.184:14): proctitle="(systemd)"
+[Thu Jan  1 00:00:18 1970] audit: type=1334 audit(18.208:15): prog-id=17 op=UNLOAD
+[Thu Jan  1 00:00:18 1970] audit: type=1300 audit(18.208:15): arch=c00000b7 syscall=57 success=yes exit=0 a0=8 a1=1 a2=0 a3=ffffa9b90c60 items=0 ppid=1 pid=532 auid=0 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=1 comm="systemd" exe="/usr/lib/systemd/systemd" subj=kernel key=(null)
+[Thu Jan  1 00:00:18 1970] audit: type=1327 audit(18.208:15): proctitle="(systemd)"
+[Thu Jan  1 00:00:18 1970] audit: type=1334 audit(18.208:16): prog-id=18 op=LOAD
+[Thu Jan  1 00:03:54 1970] vdec 30210000.video-codec: Runtime PM usage count underflow!
+[Thu Jan  1 00:04:05 1970] vdec 30210000.video-codec: error -ENXIO: IRQ index 0 not found
+[Thu Jan  1 00:04:05 1970] vdec 30210000.video-codec: failed to get irq resource, falling back to polling
+[Thu Jan  1 00:04:05 1970] vdec 30210000.video-codec: OPP table not found in device tree
+[Thu Jan  1 00:04:05 1970] vdec 30210000.video-codec: Added wave5 driver with caps: 'ENCODE' 'DECODE'
+[Thu Jan  1 00:04:05 1970] vdec 30210000.video-codec: Product Code:      0x521c
+[Thu Jan  1 00:04:05 1970] vdec 30210000.video-codec: Firmware Revision: 334314
+[Thu Jan  1 00:04:50 1970] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+[1]+  Terminated              dmesg -T -w > /tmp/dmesg.log  (wd: ~)
+(wd now: /opt/edgeai-tiovx-apps)
+root@am62axx-evm:/opt/edgeai-tiovx-apps#

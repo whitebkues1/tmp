@@ -2183,3 +2183,31 @@ root@am62axx-evm:/opt/edgeai-tiovx-apps# tail -n 100 /tmp/dmesg.log
 [Thu Jan  1 00:03:26 1970] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
 [1]+  Terminated              dmesg -T -w > /tmp/dmesg.log
 root@am62axx-evm:/opt/edgeai-tiovx-apps#
+
+
+
+####################  
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+APP: Init ... !!!
+  2380.434762 s: MEM: Init ... !!!
+  2380.434863 s: MEM: Initialized DMA HEAP (fd=5) !!!
+  2380.435064 s: MEM: Init ... Done !!!
+  2380.435086 s: IPC: Init ... !!!
+  2380.452160 s: IPC: Init ... Done !!!
+REMOTE_SERVICE: Init ... !!!
+REMOTE_SERVICE: Init ... Done !!!
+  2380.456710 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+  2380.456848 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+  2380.456865 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+  2380.456876 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+  2380.457885 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+  2380.458211 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+  2380.458464 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+  2380.458728 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+  2380.458765 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+  2380.458788 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+

@@ -832,3 +832,268 @@ cdns-sierra-phy       hdmi-audio-codec      mdio-mux-multiplexer  omap_timer    
 cdns-torrent-phy      hi6421_pmic           mmio-mux              optee                 rti-wdt               ti-sci-intr           wiz
 cpufreq-dt            hi6421v530-regulator  mt6357-regulator      pata_of_platform      saul-crypto           ti-sci-reset          xhci-hcd
 root@am62axx-evm:~#
+
+
+####################################
+
+root@am62axx-evm:~# readlink -f /sys/class/video4linux/video1/device
+/sys/devices/platform/bus@f0000/30210000.video-codec
+root@am62axx-evm:~# echo 30210000.video-codec > /sys/bus/platform/drivers/wave5-vpu/unbind
+-sh: /sys/bus/platform/drivers/wave5-vpu/unbind: No such file or directory
+root@am62axx-evm:~# echo 30210000.video-codec > /sys/bus/platform/drivers/vdec/unbind
+[ 1230.809068] vdec 30210000.video-codec: Runtime PM usage count underflow!
+root@am62axx-evm:~# sleep 1
+root@am62axx-evm:~# echo 30210000.video-codec > /sys/bus/platform/drivers/vdec/bind
+[ 1285.922146] vdec 30210000.video-codec: error -ENXIO: IRQ index 0 not found
+[ 1285.929061] vdec 30210000.video-codec: failed to get irq resource, falling back to polling
+[ 1285.937555] vdec 30210000.video-codec: OPP table not found in device tree
+[ 1285.947247] vdec 30210000.video-codec: Added wave5 driver with caps: 'ENCODE' 'DECODE'
+[ 1285.955259] vdec 30210000.video-codec: Product Code:      0x521c
+[ 1285.961313] vdec 30210000.video-codec: Firmware Revision: 334314
+root@am62axx-evm:~#  grep -H . /sys/class/video4linux/video*/nam
+grep: /sys/class/video4linux/video*/nam: No such file or directory
+root@am62axx-evm:~#  grep -H . /sys/class/video4linux/video*/name
+/sys/class/video4linux/video0/name:e5010
+/sys/class/video4linux/video1/name:C&M Wave5 VPU decoder
+/sys/class/video4linux/video2/name:C&M Wave5 VPU encoder
+root@am62axx-evm:~# mount -o bind /dev/video1 /dev/video0
+root@am62axx-evm:~# ps | grep edgea
+  711 root      3496 S    grep edgea
+root@am62axx-evm:~# dmesg -T -w > /tmp/dmesg.log & echo $! > /tmp/dmesg.pid
+[1] 712
+root@am62axx-evm:~#  cd /opt/edgeai-tiovx-apps/
+root@am62axx-evm:/opt/edgeai-tiovx-apps# timeout -s INT -k 5s 20s ./bin/Release/edgeai-tiovx-apps-main -v configs/linux/object_detection.yaml
+APP: Init ... !!!
+ 62675.267237 s: MEM: Init ... !!!
+ 62675.270898 s: MEM: Initialized DMA HEAP (fd=5) !!!
+ 62675.278244 s: MEM: Init ... Done !!!
+ 62675.285369 s: IPC: Init ... !!!
+_rpmsg_char_find_ctrldev: could not find the matching rpmsg_ctrl device for virtio2.rpmsg_chrdev.-1.13
+ 62675.301411 s: IPC: ERROR: Unable to create TX channels for CPU [c7x_1] !!!
+ 62675.301426 s: IPC: Init ... Done !!!
+APP: ERROR: IPC init failed !!!
+REMOTE_SERVICE: Init ... !!!
+_rpmsg_char_find_ctrldev: could not find the matching rpmsg_ctrl device for virtio0.rpmsg_chrdev.-1.21
+_rpmsg_char_find_ctrldev: could not find the matching rpmsg_ctrl device for virtio2.rpmsg_chrdev.-1.21
+REMOTE_SERVICE: Init ... Done !!!
+ 62675.314535 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+ 62675.330602 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+ 62675.330635 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+ 62675.330646 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+ 62675.390462 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+ 62675.390708 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+ 62675.390832 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+ 62675.390924 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+ 62675.390940 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+ 62675.390957 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+[ 1397.834058] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+Killed
+root@am62axx-evm:/opt/edgeai-tiovx-apps# kill "$(cat /tmp/dmesg.pid)"
+root@am62axx-evm:/opt/edgeai-tiovx-apps# tail -n 200 /tmp/dmesg.log
+[Thu Jan  1 00:00:28 1970] ubi0: user volume: 1, internal volumes: 1, max. volumes count: 128
+[Thu Jan  1 00:00:28 1970] ubi0: max/mean erase counter: 5/3, WL threshold: 4096, image sequence number: 524359524
+[Thu Jan  1 00:00:28 1970] ubi0: available PEBs: 0, total reserved PEBs: 1920, PEBs reserved for bad PEB handling: 40
+[Thu Jan  1 00:00:28 1970] ubi0: background thread "ubi_bgt0d" started, PID 86
+[Thu Jan  1 00:00:28 1970] clk: Disabling unused clocks
+[Thu Jan  1 00:00:28 1970] ALSA device list:
+[Thu Jan  1 00:00:28 1970]   No soundcards found.
+[Thu Jan  1 00:00:28 1970] UBIFS (ubi0:0): Mounting in unauthenticated mode
+[Thu Jan  1 00:00:28 1970] UBIFS (ubi0:0): background thread "ubifs_bgt0_0" started, PID 88
+[Thu Jan  1 00:00:28 1970] UBIFS (ubi0:0): UBIFS: mounted UBI device 0, volume 0, name "rootfs"
+[Thu Jan  1 00:00:28 1970] UBIFS (ubi0:0): LEB size: 253952 bytes (248 KiB), min./max. I/O unit sizes: 4096 bytes/4096 bytes
+[Thu Jan  1 00:00:28 1970] UBIFS (ubi0:0): FS size: 473366528 bytes (451 MiB, 1864 LEBs), max 1876 LEBs, journal size 23617536 bytes (22 MiB, 93 LEBs)
+[Thu Jan  1 00:00:28 1970] UBIFS (ubi0:0): reserved for root: 4952683 bytes (4836 KiB)
+[Thu Jan  1 00:00:28 1970] UBIFS (ubi0:0): media format: w5/r0 (latest is w5/r0), UUID 08136E56-F579-4D9C-A2D1-072FC5629857, small LPT model
+[Thu Jan  1 00:00:28 1970] VFS: Mounted root (ubifs filesystem) on device 0:22.
+[Thu Jan  1 00:00:28 1970] devtmpfs: mounted
+[Thu Jan  1 00:00:28 1970] Freeing unused kernel memory: 2496K
+[Thu Jan  1 00:00:28 1970] Run /sbin/init as init process
+[Thu Jan  1 00:00:28 1970]   with arguments:
+[Thu Jan  1 00:00:28 1970]     /sbin/init
+[Thu Jan  1 00:00:28 1970]   with environment:
+[Thu Jan  1 00:00:28 1970]     HOME=/
+[Thu Jan  1 00:00:28 1970]     TERM=linux
+[Thu Jan  1 00:00:31 1970] systemd[1]: System time before build time, advancing clock.
+[Thu Jan  1 00:00:32 1970] NET: Registered PF_INET6 protocol family
+[Thu Jan  1 00:00:32 1970] Segment Routing with IPv6
+[Thu Jan  1 00:00:32 1970] In-situ OAM (IOAM) with IPv6
+[Thu Jan  1 00:00:33 1970] systemd[1]: systemd 255.13^ running in system mode (+PAM -AUDIT -SELINUX -APPARMOR +IMA -SMACK +SECCOMP -GCRYPT -GNUTLS -OPENSSL                                                                                  +ACL +BLKID -CURL -ELFUTILS -FIDO2 -IDN2 -IDN -IPTC +KMOD -LIBCRYPTSETUP +LIBFDISK -PCRE2 -PWQUALITY -P11KIT -QRENCODE -TPM2 -BZIP2 -LZ4 -XZ -ZLIB +ZSTD -BP                                                                                 F_FRAMEWORK -XKBCOMMON +UTMP +SYSVINIT default-hierarchy=unified)
+[Thu Jan  1 00:00:33 1970] systemd[1]: Detected architecture arm64.
+[Thu Jan  1 00:00:33 1970] systemd[1]: Hostname set to <am62axx-evm>.
+[Thu Jan  1 00:00:36 1970] systemd[1]: /etc/systemd/system/sync-clocks.service:11: Standard output type syslog is obsolete, automatically updating to journa                                                                                 l. Please update your unit file, and consider removing the setting altogether.
+[Thu Jan  1 00:00:36 1970] systemd[1]: Queued start job for default target Multi-User System.
+[Thu Jan  1 00:00:36 1970] systemd[1]: Created slice Slice /system/getty.
+[Thu Jan  1 00:00:36 1970] systemd[1]: Created slice Slice /system/modprobe.
+[Thu Jan  1 00:00:36 1970] systemd[1]: Created slice Slice /system/serial-getty.
+[Thu Jan  1 00:00:36 1970] systemd[1]: Created slice User and Session Slice.
+[Thu Jan  1 00:00:36 1970] systemd[1]: Started Dispatch Password Requests to Console Directory Watch.
+[Thu Jan  1 00:00:36 1970] systemd[1]: Started Forward Password Requests to Wall Directory Watch.
+[Thu Jan  1 00:00:36 1970] systemd[1]: Expecting device /dev/ttyS2...
+[Thu Jan  1 00:00:36 1970] systemd[1]: Reached target Path Units.
+[Thu Jan  1 00:00:36 1970] systemd[1]: Reached target Remote File Systems.
+[Thu Jan  1 00:00:36 1970] systemd[1]: Reached target Slice Units.
+[Thu Jan  1 00:00:36 1970] systemd[1]: Reached target Swaps.
+[Thu Jan  1 00:00:37 1970] systemd[1]: Listening on Process Core Dump Socket.
+[Thu Jan  1 00:00:37 1970] systemd[1]: Listening on initctl Compatibility Named Pipe.
+[Thu Jan  1 00:00:37 1970] systemd[1]: Listening on Journal Audit Socket.
+[Thu Jan  1 00:00:37 1970] systemd[1]: Listening on Journal Socket (/dev/log).
+[Thu Jan  1 00:00:37 1970] systemd[1]: Listening on Journal Socket.
+[Thu Jan  1 00:00:37 1970] systemd[1]: Listening on Network Service Netlink Socket.
+[Thu Jan  1 00:00:37 1970] systemd[1]: Listening on udev Control Socket.
+[Thu Jan  1 00:00:37 1970] systemd[1]: Listening on udev Kernel Socket.
+[Thu Jan  1 00:00:37 1970] systemd[1]: Listening on User Database Manager Socket.
+[Thu Jan  1 00:00:37 1970] systemd[1]: Mounting Huge Pages File System...
+[Thu Jan  1 00:00:37 1970] systemd[1]: Mounting POSIX Message Queue File System...
+[Thu Jan  1 00:00:37 1970] systemd[1]: Mounting Kernel Debug File System...
+[Thu Jan  1 00:00:37 1970] systemd[1]: Kernel Trace File System was skipped because of an unmet condition check (ConditionPathExists=/sys/kernel/tracing).
+[Thu Jan  1 00:00:37 1970] systemd[1]: Mounting Temporary Directory /tmp...
+[Thu Jan  1 00:00:37 1970] systemd[1]: Starting Create List of Static Device Nodes...
+[Thu Jan  1 00:00:37 1970] systemd[1]: Starting Load Kernel Module configfs...
+[Thu Jan  1 00:00:37 1970] systemd[1]: Starting Load Kernel Module drm...
+[Thu Jan  1 00:00:37 1970] systemd[1]: Starting Load Kernel Module fuse...
+[Thu Jan  1 00:00:37 1970] systemd[1]: Starting Start psplash boot splash screen...
+[Thu Jan  1 00:00:37 1970] systemd[1]: File System Check on Root Device was skipped because of an unmet condition check (ConditionPathIsReadWrite=!/).
+[Thu Jan  1 00:00:37 1970] systemd[1]: Starting Journal Service...
+[Thu Jan  1 00:00:38 1970] systemd[1]: Starting Load Kernel Modules...
+[Thu Jan  1 00:00:38 1970] systemd[1]: Starting Generate network units from Kernel command line...
+[Thu Jan  1 00:00:38 1970] systemd[1]: Starting Remount Root and Kernel File Systems...
+[Thu Jan  1 00:00:38 1970] systemd[1]: Starting Coldplug All udev Devices...
+[Thu Jan  1 00:00:38 1970] systemd[1]: Mounted Huge Pages File System.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Mounted POSIX Message Queue File System.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Mounted Kernel Debug File System.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Mounted Temporary Directory /tmp.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Finished Create List of Static Device Nodes.
+[Thu Jan  1 00:00:38 1970] systemd[1]: modprobe@configfs.service: Deactivated successfully.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Finished Load Kernel Module configfs.
+[Thu Jan  1 00:00:38 1970] platform 2b300050.target-module: deferred probe pending
+[Thu Jan  1 00:00:38 1970] systemd[1]: Finished Generate network units from Kernel command line.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Finished Remount Root and Kernel File Systems.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Reached target Preparation for Network.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Mounting Kernel Configuration File System...
+[Thu Jan  1 00:00:38 1970] fuse: init (API version 7.39)
+[Thu Jan  1 00:00:38 1970] cryptodev: loading out-of-tree module taints kernel.
+[Thu Jan  1 00:00:38 1970] cryptodev: driver 1.14 loaded.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Rebuild Hardware Database was skipped because of an unmet condition check (ConditionNeedsUpdate=/etc).
+[Thu Jan  1 00:00:38 1970] systemd[1]: Starting Create Static Device Nodes in /dev gracefully...
+[Thu Jan  1 00:00:38 1970] systemd-journald[115]: Collecting audit messages is enabled.
+[Thu Jan  1 00:00:38 1970] systemd[1]: modprobe@fuse.service: Deactivated successfully.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Finished Load Kernel Module fuse.
+[Thu Jan  1 00:00:38 1970] systemd[1]: psplash-start.service: Main process exited, code=exited, status=255/EXCEPTION
+[Thu Jan  1 00:00:38 1970] systemd[1]: psplash-start.service: Failed with result 'exit-code'.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Failed to start Start psplash boot splash screen.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Dependency failed for Start psplash-systemd progress communication helper.
+[Thu Jan  1 00:00:38 1970] systemd[1]: psplash-systemd.service: Job psplash-systemd.service/start failed with result 'dependency'.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Finished Load Kernel Modules.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Mounted Kernel Configuration File System.
+[Thu Jan  1 00:00:38 1970] systemd[1]: Mounting FUSE Control File System...
+[Thu Jan  1 00:00:39 1970] systemd[1]: Starting Apply Kernel Variables...
+[Thu Jan  1 00:00:39 1970] systemd[1]: Mounted FUSE Control File System.
+[Thu Jan  1 00:00:39 1970] systemd[1]: Started Journal Service.
+[Thu Jan  1 00:00:39 1970] systemd-journald[115]: Received client request to flush runtime journal.
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487100.236:2): prog-id=6 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487100.248:3): prog-id=7 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487100.256:4): prog-id=8 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487100.696:5): prog-id=9 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487100.704:6): prog-id=10 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487101.068:7): prog-id=11 op=LOAD
+[Thu Jan  1 00:00:41 1970] audit: type=1334 audit(1728487101.136:8): prog-id=11 op=UNLOAD
+[Thu Jan  1 00:00:41 1970] audit: type=1334 audit(1728487101.172:9): prog-id=12 op=LOAD
+[Thu Jan  1 00:00:41 1970] audit: type=1334 audit(1728487101.204:10): prog-id=12 op=UNLOAD
+[Thu Jan  1 00:00:41 1970] audit: type=1334 audit(1728487101.280:11): prog-id=13 op=LOAD
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.tiboot3' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.u-boot' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.env' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.env.backup' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:42 1970] omap-mailbox 29000000.mailbox: omap mailbox rev 0x66fca100
+[Thu Jan  1 00:00:42 1970] omap-mailbox 29010000.mailbox: omap mailbox rev 0x66fca100
+[Thu Jan  1 00:00:42 1970] omap-mailbox 29020000.mailbox: omap mailbox rev 0x66fca100
+[Thu Jan  1 00:00:42 1970] omap-mailbox 29030000.mailbox: no available mbox devices found
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.kernel' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.dtb' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.rootfs' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:43 1970] tps6598x 0-003f: Unable to find the interrupt, switching to polling
+[Thu Jan  1 00:00:43 1970] sii902x 1-003b: supply iovcc not found, using dummy regulator
+[Thu Jan  1 00:00:43 1970] sii902x 1-003b: supply cvcc12 not found, using dummy regulator
+[Thu Jan  1 00:00:43 1970] i2c i2c-1: Added multiplexed i2c bus 3
+[Thu Jan  1 00:00:44 1970] k3-dsp-rproc 7e000000.dsp: assigned reserved memory node c7x-dma-memory@99800000
+[Thu Jan  1 00:00:44 1970] k3-dsp-rproc 7e000000.dsp: configured DSP for remoteproc mode
+[Thu Jan  1 00:00:44 1970] k3-dsp-rproc 7e000000.dsp: local reset is deasserted for device
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc0: 7e000000.dsp is available
+[Thu Jan  1 00:00:44 1970] [drm] Initialized tidss 1.0.0 20180215 for 30200000.dss on minor 0
+[Thu Jan  1 00:00:44 1970] Console: switching to colour frame buffer device 240x67
+[Thu Jan  1 00:00:44 1970] tidss 30200000.dss: [drm] fb0: tidssdrmfb frame buffer device
+[Thu Jan  1 00:00:44 1970] mc: Linux media interface: v0.10
+[Thu Jan  1 00:00:44 1970] platform 79000000.r5f: configured R5F for remoteproc mode
+[Thu Jan  1 00:00:44 1970] platform 79000000.r5f: assigned reserved memory node r5f-dma-memory@9b800000
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc1: 79000000.r5f is available
+[Thu Jan  1 00:00:44 1970] platform 78000000.r5f: R5F core may have been powered on by a different host, programmed state (0) != actual state (1)
+[Thu Jan  1 00:00:44 1970] platform 78000000.r5f: configured R5F for IPC-only mode
+[Thu Jan  1 00:00:44 1970] platform 78000000.r5f: assigned reserved memory node r5f-dma-memory@9c800000
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc2: 78000000.r5f is available
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc2: attaching to 78000000.r5f
+[Thu Jan  1 00:00:44 1970] rproc-virtio rproc-virtio.8.auto: assigned reserved memory node r5f-dma-memory@9c800000
+[Thu Jan  1 00:00:44 1970] virtio_rpmsg_bus virtio0: rpmsg host is online
+[Thu Jan  1 00:00:44 1970] virtio_rpmsg_bus virtio0: creating channel rpmsg_chrdev addr 0xd
+[Thu Jan  1 00:00:44 1970] rproc-virtio rproc-virtio.8.auto: registered virtio0 (type 7)
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc2: remote processor 78000000.r5f is now attached
+[Thu Jan  1 00:00:44 1970] rtc-ti-k3 2b1f0000.rtc: registered as rtc0
+[Thu Jan  1 00:00:44 1970] rtc-ti-k3 2b1f0000.rtc: setting system clock to 1970-01-01T00:00:44 UTC (44)
+[Thu Jan  1 00:00:44 1970] systemd-journald[115]: Time jumped backwards, rotating.
+[Thu Jan  1 00:00:45 1970] remoteproc remoteproc1: powering up 79000000.r5f
+[Thu Jan  1 00:00:45 1970] remoteproc remoteproc1: Booting fw image am62a-mcu-r5f0_0-fw, size 53172
+[Thu Jan  1 00:00:45 1970] rproc-virtio rproc-virtio.9.auto: assigned reserved memory node r5f-dma-memory@9b800000
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: rpmsg host is online
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: creating channel ti.ipc4.ping-pong addr 0xd
+[Thu Jan  1 00:00:45 1970] rproc-virtio rproc-virtio.9.auto: registered virtio1 (type 7)
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: creating channel rpmsg_chrdev addr 0xe
+[Thu Jan  1 00:00:45 1970] remoteproc remoteproc1: remote processor 79000000.r5f is now up
+[Thu Jan  1 00:00:46 1970] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[Thu Jan  1 00:00:46 1970] videodev: Linux video capture interface: v2.00
+[Thu Jan  1 00:00:46 1970] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[Thu Jan  1 00:00:46 1970] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[Thu Jan  1 00:00:46 1970] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+[Thu Jan  1 00:00:46 1970] cfg80211: failed to load regulatory.db
+[Thu Jan  1 00:00:47 1970] mtdblock: MTD device 'ospi_nand.dtb' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:47 1970] e5010 fd20000.jpeg-encoder: Device registered as /dev/video0
+[Thu Jan  1 00:00:48 1970] mtdblock: MTD device 'ospi_nand.env.backup' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: error -ENXIO: IRQ index 0 not found
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: failed to get irq resource, falling back to polling
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: OPP table not found in device tree
+[Thu Jan  1 00:00:48 1970] mtdblock: MTD device 'ospi_nand.u-boot' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:49 1970] mtdblock: MTD device 'ospi_nand.tiboot3' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:50 1970] am65-cpsw-nuss 8000000.ethernet eth0: PHY [8000f00.mdio:00] driver [TI DP83867] (irq=POLL)
+[Thu Jan  1 00:00:50 1970] am65-cpsw-nuss 8000000.ethernet eth0: configuring for phy/rgmii-rxid link mode
+[Thu Jan  1 00:00:50 1970] mtdblock: MTD device 'ospi_nand.rootfs' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:50 1970] mtdblock: MTD device 'ospi_nand.kernel' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Added wave5 driver with caps: 'ENCODE' 'DECODE'
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Product Code:      0x521c
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Firmware Revision: 334314
+[Thu Jan  1 00:00:53 1970] mtdblock: MTD device 'ospi_nand.env' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:53 1970] mtdblock: MTD device 'ospi_nand.tispl' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:55 1970] mtdblock: MTD device 'ospi_nand.rootfs' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:57 1970] FAT-fs (mmcblk1p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[Thu Jan  1 00:00:57 1970] FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[Thu Jan  1 00:00:58 1970] EXT4-fs (mmcblk1p2): mounting ext3 file system using the ext4 subsystem
+[Thu Jan  1 00:00:58 1970] EXT4-fs (mmcblk1p2): mounted filesystem 54efb1d1-9ee3-469f-9ea4-b968ac69f78f r/w with ordered data mode. Quota mode: none.
+[Thu Jan  1 00:01:01 1970] remoteproc remoteproc0: powering up 7e000000.dsp
+[Thu Jan  1 00:01:01 1970] remoteproc remoteproc0: Booting fw image am62a-c71_0-fw, size 10719312
+[Thu Jan  1 00:01:01 1970] k3-dsp-rproc 7e000000.dsp: booting DSP core using boot addr = 0x99a00000
+[Thu Jan  1 00:01:02 1970] rproc-virtio rproc-virtio.10.auto: assigned reserved memory node c7x-dma-memory@99800000
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio2: rpmsg host is online
+[Thu Jan  1 00:01:02 1970] rproc-virtio rproc-virtio.10.auto: registered virtio2 (type 7)
+[Thu Jan  1 00:01:02 1970] remoteproc remoteproc0: remote processor 7e000000.dsp is now up
+[Thu Jan  1 00:20:50 1970] vdec 30210000.video-codec: Runtime PM usage count underflow!
+[Thu Jan  1 00:21:45 1970] vdec 30210000.video-codec: error -ENXIO: IRQ index 0 not found
+[Thu Jan  1 00:21:45 1970] vdec 30210000.video-codec: failed to get irq resource, falling back to polling
+[Thu Jan  1 00:21:45 1970] vdec 30210000.video-codec: OPP table not found in device tree
+[Thu Jan  1 00:21:45 1970] vdec 30210000.video-codec: Added wave5 driver with caps: 'ENCODE' 'DECODE'
+[Thu Jan  1 00:21:45 1970] vdec 30210000.video-codec: Product Code:      0x521c
+[Thu Jan  1 00:21:45 1970] vdec 30210000.video-codec: Firmware Revision: 334314
+[Thu Jan  1 00:23:37 1970] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+[1]+  Terminated              dmesg -T -w > /tmp/dmesg.log  (wd: ~)
+(wd now: /opt/edgeai-tiovx-apps)
+root@am62axx-evm:/opt/edgeai-tiovx-apps#

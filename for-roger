@@ -695,3 +695,7 @@ root@am62axx-evm:/opt/edgeai-tiovx-apps# tail -n 200 /tmp/dmesg.log
 [1]-  Terminated              dmesg -T -w > /tmp/dmesg.log  (wd: ~)
 (wd now: /opt/edgeai-tiovx-apps)
 root@am62axx-evm:/opt/edgeai-tiovx-apps#
+
+
+################## 
+https://e2echina.ti.com/support/machine-translation/mt-processors/f/mt-processors-forum/1025512/am67a-gstreamer-v4l2h265dec-cpu

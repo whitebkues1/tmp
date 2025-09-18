@@ -1,0 +1,139 @@
+#####################  直接run demo
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ls /run/edgeai-out/
+0000.yuv  0001.yuv  0002.yuv  0003.yuv  0004.yuv  0005.yuv  0006.yuv  0007.yuv
+root@am62axx-evm:/opt/edgeai-tiovx-apps# rm /run/edgeai-out/*
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ls /run/edgeai-out/
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+APP: Init ... !!!
+  4085.205560 s: MEM: Init ... !!!
+  4085.205660 s: MEM: Initialized DMA HEAP (fd=5) !!!
+  4085.205862 s: MEM: Init ... Done !!!
+  4085.205883 s: IPC: Init ... !!!
+  4085.222768 s: IPC: Init ... Done !!!
+REMOTE_SERVICE: Init ... !!!
+REMOTE_SERVICE: Init ... Done !!!
+  4085.227364 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+  4085.227502 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+  4085.227517 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+  4085.227528 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+  4085.228668 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+  4085.228953 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+  4085.229250 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+  4085.229514 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+  4085.229548 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+  4085.229572 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+^C[ 1541.547050] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+  4178.381594 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffa8d66240 type:00000815 #####
+  4178.381712 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffa8d666a0 type:00000815 #####
+  4178.381740 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffa8d666a0 type:00000815 #####
+  4178.381757 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffa8d668d0 type:00000815 #####
+  4178.381773 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffa8d668d0 type:00000815 #####
+  4178.382035 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffa8ccf150 type:0000080f #####
+  4178.386835 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffa8cce8e0 type:0000080f #####
+  4178.389799 s:  VX_ZONE_WARNING: [vxReleaseContext:1275] Found a reference 0xffffa8cce070 of type 0000080f at external count 1, internal count 0, releasing it
+  4178.389840 s:  VX_ZONE_WARNING: [vxReleaseContext:1277] Releasing reference (name=image_86) now as a part of garbage collection
+APP: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... Done !!!
+  4178.395292 s: IPC: Deinit ... !!!
+  4178.395823 s: IPC: DeInit ... Done !!!
+  4178.395867 s: MEM: Deinit ... !!!
+  4178.395880 s: DDR_SHARED_MEM: Alloc's: 46 alloc's of 48288008 bytes
+  4178.395891 s: DDR_SHARED_MEM: Free's : 46 free's  of 48288008 bytes
+  4178.395901 s: DDR_SHARED_MEM: Open's : 0 allocs  of 0 bytes
+  4178.395916 s: MEM: Deinit ... Done !!!
+APP: Deinit ... Done !!!
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ls /run/edgeai-out/
+0000.yuv  0007.yuv  0014.yuv  0021.yuv  0028.yuv  0035.yuv  0042.yuv  0049.yuv  0056.yuv  0063.yuv  0070.yuv  0077.yuv  0084.yuv  0091.yuv
+0001.yuv  0008.yuv  0015.yuv  0022.yuv  0029.yuv  0036.yuv  0043.yuv  0050.yuv  0057.yuv  0064.yuv  0071.yuv  0078.yuv  0085.yuv
+0002.yuv  0009.yuv  0016.yuv  0023.yuv  0030.yuv  0037.yuv  0044.yuv  0051.yuv  0058.yuv  0065.yuv  0072.yuv  0079.yuv  0086.yuv
+0003.yuv  0010.yuv  0017.yuv  0024.yuv  0031.yuv  0038.yuv  0045.yuv  0052.yuv  0059.yuv  0066.yuv  0073.yuv  0080.yuv  0087.yuv
+0004.yuv  0011.yuv  0018.yuv  0025.yuv  0032.yuv  0039.yuv  0046.yuv  0053.yuv  0060.yuv  0067.yuv  0074.yuv  0081.yuv  0088.yuv
+0005.yuv  0012.yuv  0019.yuv  0026.yuv  0033.yuv  0040.yuv  0047.yuv  0054.yuv  0061.yuv  0068.yuv  0075.yuv  0082.yuv  0089.yuv
+0006.yuv  0013.yuv  0020.yuv  0027.yuv  0034.yuv  0041.yuv  0048.yuv  0055.yuv  0062.yuv  0069.yuv  0076.yuv  0083.yuv  0090.yuv
+root@am62axx-evm:/opt/edgeai-tiovx-apps#
+root@am62axx-evm:/opt/edgeai-tiovx-apps# vi configs/linux/object_detection.yaml
+root@am62axx-evm:/opt/edgeai-tiovx-apps# cat configs/linux/object_detection.yaml
+title: Object Detection
+inputs:
+    input0:
+        source: VIDEO
+        width: 1280
+        height: 768
+        video_path: /opt/edgeai-test-data/videos/video0_1280_768.h264
+models:
+    model0:
+        model_path: /opt/model_zoo/TFL-OD-2020-ssdLite-mobDet-DSP-coco-320x320
+        viz-threshold: 0.6
+    model1:
+        model_path: /opt/model_zoo/ONR-OD-8200-yolox-nano-lite-mmdet-coco-416x416
+        viz-threshold: 0.6
+outputs:
+    output0:
+        sink: LINUX_DISPLAY
+        width: 1920
+        height: 1080
+    output1:
+        sink: H264_ENCODE
+        width: 1920
+        height: 1088
+        output_path: /opt/edgeai-test-data/output/output_video0.h264
+    output2:
+        sink: IMG_DIR
+        width: 1920
+        height: 1080
+        output_path: /run/edgeai-out
+flows:
+    flow0:
+        pipeline: [input0,model1,output0]
+        mosaic:
+            - [0,0,1280,720]root@am62axx-evm:/opt/edgeai-tiovx-apps#
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ./bin/Release/edgeai-tiovx-apps-main configs/linux/object_detection.yaml
+APP: Init ... !!!
+  4331.173868 s: MEM: Init ... !!!
+  4331.173968 s: MEM: Initialized DMA HEAP (fd=5) !!!
+  4331.174173 s: MEM: Init ... Done !!!
+  4331.174195 s: IPC: Init ... !!!
+  4331.191115 s: IPC: Init ... Done !!!
+REMOTE_SERVICE: Init ... !!!
+REMOTE_SERVICE: Init ... Done !!!
+  4331.195682 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+  4331.195819 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+  4331.195834 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+  4331.195845 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+  4331.196874 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+  4331.197224 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+  4331.197468 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+  4331.197729 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+  4331.197767 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+  4331.197793 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+^C[ 1729.183389] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+  4366.053400 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffb3246240 type:00000815 #####
+  4366.053521 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffb32466a0 type:00000815 #####
+  4366.053538 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffb32466a0 type:00000815 #####
+  4366.053556 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffb32468d0 type:00000815 #####
+  4366.053571 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffb32468d0 type:00000815 #####
+  4366.053803 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffb31af150 type:0000080f #####
+  4366.058426 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffffb31ae8e0 type:0000080f #####
+  4366.061383 s:  VX_ZONE_WARNING: [vxReleaseContext:1275] Found a reference 0xffffb31ae070 of type 0000080f at external count 1, internal count 0, releasing it
+  4366.061423 s:  VX_ZONE_WARNING: [vxReleaseContext:1277] Releasing reference (name=image_86) now as a part of garbage collection
+APP: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... Done !!!
+  4366.066833 s: IPC: Deinit ... !!!
+  4366.067381 s: IPC: DeInit ... Done !!!
+  4366.067425 s: MEM: Deinit ... !!!
+  4366.067438 s: DDR_SHARED_MEM: Alloc's: 46 alloc's of 48288008 bytes
+  4366.067450 s: DDR_SHARED_MEM: Free's : 46 free's  of 48288008 bytes
+  4366.067459 s: DDR_SHARED_MEM: Open's : 0 allocs  of 0 bytes
+  4366.067474 s: MEM: Deinit ... Done !!!
+APP: Deinit ... Done !!!
+root@am62axx-evm:/opt/edgeai-tiovx-apps#

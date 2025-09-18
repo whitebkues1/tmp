@@ -792,3 +792,43 @@ root@am62axx-evm:/opt/edgeai-tiovx-apps# tail -n 50 /tmp/dmesg.log
 [Thu Jan  1 00:04:07 1970] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
 [1]+  Terminated              dmesg -T -w > /tmp/dmesg.log  (wd: ~)
 (wd now: /opt/edgeai-tiovx-apps)
+
+################
+root@am62axx-evm:~# fuser -v /dev/video0 /dev/video1
+fuser: invalid option -- 'v'
+BusyBox v1.36.1 () multi-call binary.
+
+Usage: fuser [-msk46] [-SIGNAL] FILE or PORT/PROTO
+root@am62axx-evm:~# fuser -h
+fuser: invalid option -- 'h'
+BusyBox v1.36.1 () multi-call binary.
+
+Usage: fuser [-msk46] [-SIGNAL] FILE or PORT/PROTO
+root@am62axx-evm:~# fuser /dev/video0
+root@am62axx-evm:~# fuser /dev/video1
+root@am62axx-evm:~#
+root@am62axx-evm:~# ls /sys/bus/platform/drivers | grep -i wave5
+root@am62axx-evm:~# ls /sys/bus/platform/drivers | grep  wave5
+root@am62axx-evm:~# ls /sys/bus/platform/drivers | grep video
+root@am62axx-evm:~# ls /sys/bus/platform/drivers
+ARM-CCI               davinci-mcasp         j721e-pcie            mt6358-regulator      pata_platform         sdhci-am654           ti-sysc
+ahci                  davinci_gpio          k3-chipinfo           mt6359-regulator      pci-host-generic      sdhci-arasan          ti-syscon-gate-clk
+alarmtimer            davinci_mdio          k3-dsp-rproc          mt6360-regulator      phy-am654             serial8250            ti-udma
+am65-cpsw-nuss        display-connector     k3-j72xx-soc-thermal  mt6397                phy-gmii-sel          simple-framebuffer    ti_opp_supply
+am65-cpts             dw-pcie               k3-ringacc            mt6397-regulator      physmap-flash         simple-pm-bus         ti_sci_pm_domains
+arm-scmi              dwc3                  k3_r5_rproc           of_fixed_clk          pinctrl-single        snd-soc-dummy         tidss
+arm-smmu              dwc3-am62             keystone-dwc3         of_fixed_factor_clk   psci-cpuidle          snps-udc-plat         tps65219-gpio
+arm-smmu-v3           dwc3-of-simple        keystone-pcie         of_serial             psci-cpuidle-domain   soc-audio             tps65219-pmic
+arm_smc_wdt           e5010                 leds-gpio             ohci-platform         pwm-clock             sram                  tps6594-esm
+armv8-pmu             ehci-platform         leds-syscon           omap-elm              pwm-regulator         syscon                tps6594-pfsm
+asoc-simple-card      extcon-usb-gpio       leds_pwm              omap-gpmc             pwrseq_emmc           syscon-poweroff       tps6594-pinctrl
+axp20x-regulator      fsl-linflexuart       max77620-gpio         omap-mailbox          pwrseq_simple         syscon-reboot         tps6594-regulator
+basic-mmio-gpio       fsl-lpuart            max77620-pmic         omap2-nand            rcpm                  syscon-reboot-mode    tps6594-rtc
+bd718xx-pmic          gpio-clk              max77686-rtc          omap8250              reg-dummy             ti-cpufreq            unimac-mdio
+bd9571mwv-regulator   gpio-keys             mcrc64                omap_hwspinlock       reg-fixed-voltage     ti-msgmgr             usb-conn-gpio
+bdc                   gpio-regulator        mdio-gpio             omap_i2c              rk808-regulator       ti-sci                usb_phy_generic
+cadence-qspi          gpio-syscon           mdio-mux-mmioreg      omap_rng              rproc-virtio          ti-sci-clk            vdec
+cdns-sierra-phy       hdmi-audio-codec      mdio-mux-multiplexer  omap_timer            rtc-ti-k3             ti-sci-inta           virtio-mmio
+cdns-torrent-phy      hi6421_pmic           mmio-mux              optee                 rti-wdt               ti-sci-intr           wiz
+cpufreq-dt            hi6421v530-regulator  mt6357-regulator      pata_of_platform      saul-crypto           ti-sci-reset          xhci-hcd
+root@am62axx-evm:~#

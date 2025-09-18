@@ -2211,3 +2211,325 @@ Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
   Duration: N/A, bitrate: N/A
   Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
 
+####################  
+
+root@am62axx-evm:~#
+root@am62axx-evm:~#  cd /opt/edgeai-tiovx-apps/
+root@am62axx-evm:/opt/edgeai-tiovx-apps# cat configs/linux/object_detection.yaml
+title: Object Detection
+inputs:
+    input0:
+        source: VIDEO
+        width: 1280
+        height: 768
+        video_path: /opt/edgeai-test-data/videos/video0_1280_768.h264
+models:
+    model0:
+        model_path: /opt/model_zoo/TFL-OD-2020-ssdLite-mobDet-DSP-coco-320x320
+        viz-threshold: 0.6
+    model1:
+        model_path: /opt/model_zoo/ONR-OD-8200-yolox-nano-lite-mmdet-coco-416x416
+        viz-threshold: 0.6
+outputs:
+    output0:
+        sink: LINUX_DISPLAY
+        width: 1280
+        height: 768
+    output1:
+        sink: H264_ENCODE
+        width: 1920
+        height: 1088
+        output_path: /opt/edgeai-test-data/output/output_video0.h264
+    output2:
+        sink: IMG_DIR
+        width: 1920
+        height: 1080
+        output_path: /opt/edgeai-test-data/output/
+flows:
+    flow0:
+        pipeline: [input0,model1,output0]
+        mosaic:
+            - [0,0,1280,720]root@am62axx-evm:/opt/edgeai-tiovx-apps#
+root@am62axx-evm:/opt/edgeai-tiovx-apps# grep -H . /sys/class/video4linux/video*/name
+/sys/class/video4linux/video0/name:e5010
+/sys/class/video4linux/video1/name:C&M Wave5 VPU decoder
+/sys/class/video4linux/video2/name:C&M Wave5 VPU encoder
+root@am62axx-evm:/opt/edgeai-tiovx-apps# mount --bind /dev/video1 /dev/video0
+root@am62axx-evm:/opt/edgeai-tiovx-apps# mkdir -p /run/edgeai-out
+root@am62axx-evm:/opt/edgeai-tiovx-apps# vi configs/linux/object_detection.yaml
+root@am62axx-evm:/opt/edgeai-tiovx-apps# dmesg -T -w > /tmp/dmesg.log & echo $! > /tmp/dmesg.pid
+[1] 677
+root@am62axx-evm:/opt/edgeai-tiovx-apps# timeout -s INT -k 5s 20s ./bin/Release/edgeai-tiovx-apps-main -v configs/linux/object_detection.yaml
+APP: Init ... !!!
+  3182.443864 s: MEM: Init ... !!!
+  3182.447537 s: MEM: Initialized DMA HEAP (fd=5) !!!
+  3182.454887 s: MEM: Init ... Done !!!
+  3182.462008 s: IPC: Init ... !!!
+  3182.478992 s: IPC: Init ... Done !!!
+REMOTE_SERVICE: Init ... !!!
+REMOTE_SERVICE: Init ... Done !!!
+  3182.495343 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+  3182.511412 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+  3182.511453 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+  3182.511469 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+  3182.571318 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+  3182.571546 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+  3182.571663 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+  3182.571785 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+  3182.571801 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+  3182.571822 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+================================================
+
+CPU: mpu: TOTAL LOAD = 11.88
+CPU: mcu1_0: TOTAL LOAD = 14.04
+CPU:  c7x_1: TOTAL LOAD = 66.90
+HWA:   MSC0: LOAD = 61.56 % ( 200 MP/s )
+HWA:   MSC1: LOAD = 27.73 % ( 52 MP/s )
+DDR: READ  BW: AVG =   2109 MB/s, PEAK =   2109 MB/s
+DDR: WRITE BW: AVG =    895 MB/s, PEAK =    895 MB/s
+DDR: TOTAL BW: AVG =   3004 MB/s, PEAK =   3004 MB/s
+TEMP: thermal_zone0(DDR) = 45.21 C
+TEMP: thermal_zone1(CPU) = 43.15 C
+TEMP: thermal_zone2(C7x) = 38.05 C
+FPS: 67
+
+tidl_node - 9.319 ms
+
+Graph - 26.354 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 13.03
+CPU: mcu1_0: TOTAL LOAD = 4.62
+CPU:  c7x_1: TOTAL LOAD = 73.42
+HWA:   MSC0: LOAD = 64.32 % ( 221 MP/s )
+HWA:   MSC1: LOAD = 30.64 % ( 58 MP/s )
+DDR: READ  BW: AVG =   2258 MB/s, PEAK =   2258 MB/s
+DDR: WRITE BW: AVG =    965 MB/s, PEAK =    965 MB/s
+DDR: TOTAL BW: AVG =   3223 MB/s, PEAK =   3223 MB/s
+TEMP: thermal_zone0(DDR) = 44.98 C
+TEMP: thermal_zone1(CPU) = 44.53 C
+TEMP: thermal_zone2(C7x) = 38.05 C
+FPS: 78
+
+tidl_node - 9.318 ms
+
+Graph - 24.538 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 13.18
+CPU: mcu1_0: TOTAL LOAD = 4.48
+CPU:  c7x_1: TOTAL LOAD = 73.91
+HWA:   MSC0: LOAD = 64.86 % ( 223 MP/s )
+HWA:   MSC1: LOAD = 30.88 % ( 58 MP/s )
+DDR: READ  BW: AVG =   2265 MB/s, PEAK =   2265 MB/s
+DDR: WRITE BW: AVG =    974 MB/s, PEAK =    974 MB/s
+DDR: TOTAL BW: AVG =   3239 MB/s, PEAK =   3239 MB/s
+TEMP: thermal_zone0(DDR) = 45.21 C
+TEMP: thermal_zone1(CPU) = 43.84 C
+TEMP: thermal_zone2(C7x) = 37.81 C
+FPS: 78
+
+tidl_node - 9.314 ms
+
+Graph - 23.971 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 12.71
+CPU: mcu1_0: TOTAL LOAD = 4.57
+CPU:  c7x_1: TOTAL LOAD = 73.63
+HWA:   MSC0: LOAD = 64.77 % ( 223 MP/s )
+HWA:   MSC1: LOAD = 30.86 % ( 58 MP/s )
+DDR: READ  BW: AVG =   2260 MB/s, PEAK =   2260 MB/s
+DDR: WRITE BW: AVG =    970 MB/s, PEAK =    970 MB/s
+DDR: TOTAL BW: AVG =   3230 MB/s, PEAK =   3230 MB/s
+TEMP: thermal_zone0(DDR) = 45.44 C
+TEMP: thermal_zone1(CPU) = 44.07 C
+TEMP: thermal_zone2(C7x) = 38.51 C
+FPS: 78
+
+tidl_node - 9.305 ms
+
+Graph - 23.697 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 13.11
+CPU: mcu1_0: TOTAL LOAD = 4.76
+CPU:  c7x_1: TOTAL LOAD = 73.91
+HWA:   MSC0: LOAD = 64.57 % ( 222 MP/s )
+HWA:   MSC1: LOAD = 30.78 % ( 58 MP/s )
+DDR: READ  BW: AVG =   2260 MB/s, PEAK =   2260 MB/s
+DDR: WRITE BW: AVG =    969 MB/s, PEAK =    969 MB/s
+DDR: TOTAL BW: AVG =   3229 MB/s, PEAK =   3229 MB/s
+TEMP: thermal_zone0(DDR) = 45.44 C
+TEMP: thermal_zone1(CPU) = 44.98 C
+TEMP: thermal_zone2(C7x) = 38.75 C
+FPS: 78
+
+tidl_node - 9.312 ms
+
+Graph - 23.548 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 13.18
+CPU: mcu1_0: TOTAL LOAD = 4.66
+CPU:  c7x_1: TOTAL LOAD = 73.89
+HWA:   MSC0: LOAD = 64.85 % ( 223 MP/s )
+HWA:   MSC1: LOAD = 30.89 % ( 58 MP/s )
+DDR: READ  BW: AVG =   2269 MB/s, PEAK =   2269 MB/s
+DDR: WRITE BW: AVG =    971 MB/s, PEAK =    971 MB/s
+DDR: TOTAL BW: AVG =   3240 MB/s, PEAK =   3240 MB/s
+TEMP: thermal_zone0(DDR) = 45.66 C
+TEMP: thermal_zone1(CPU) = 44.53 C
+TEMP: thermal_zone2(C7x) = 38.28 C
+FPS: 78
+
+tidl_node - 9.310 ms
+
+Graph - 23.436 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 13.03
+CPU: mcu1_0: TOTAL LOAD = 5.08
+CPU:  c7x_1: TOTAL LOAD = 74.39
+HWA:   MSC0: LOAD = 65.02 % ( 224 MP/s )
+HWA:   MSC1: LOAD = 31.07 % ( 59 MP/s )
+DDR: READ  BW: AVG =   2278 MB/s, PEAK =   2278 MB/s
+DDR: WRITE BW: AVG =    979 MB/s, PEAK =    979 MB/s
+DDR: TOTAL BW: AVG =   3257 MB/s, PEAK =   3257 MB/s
+TEMP: thermal_zone0(DDR) = 45.44 C
+TEMP: thermal_zone1(CPU) = 44.75 C
+TEMP: thermal_zone2(C7x) = 38.75 C
+FPS: 79
+
+tidl_node - 9.309 ms
+
+Graph - 23.351 ms
+================================================
+
+[  561.589734] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+  3198.424244 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff91dd6240 type:00000815 #####
+  3198.424351 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff91dd66a0 type:00000815 #####
+  3198.424368 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff91dd66a0 type:00000815 #####
+  3198.424385 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff91dd68d0 type:00000815 #####
+  3198.424401 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff91dd68d0 type:00000815 #####
+  3198.424634 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff91d3f150 type:0000080f #####
+  3198.429491 s:  VX_ZONE_WARNING: [ownDecrementReference:644] #### EXTERNAL REF COUNT IS ALREADY ZERO!!! 0xffff91d3e8e0 type:0000080f #####
+  3198.432393 s:  VX_ZONE_WARNING: [vxReleaseContext:1275] Found a reference 0xffff91d3e070 of type 0000080f at external count 1, internal count 0, releasing it
+  3198.432432 s:  VX_ZONE_WARNING: [vxReleaseContext:1277] Releasing reference (name=image_86) now as a part of garbage collection
+APP: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... Done !!!
+  3198.437864 s: IPC: Deinit ... !!!
+  3198.438339 s: IPC: DeInit ... Done !!!
+  3198.438379 s: MEM: Deinit ... !!!
+  3198.438392 s: DDR_SHARED_MEM: Alloc's: 46 alloc's of 48288008 bytes
+  3198.438403 s: DDR_SHARED_MEM: Free's : 46 free's  of 48288008 bytes
+  3198.438413 s: DDR_SHARED_MEM: Open's : 0 allocs  of 0 bytes
+  3198.438429 s: MEM: Deinit ... Done !!!
+APP: Deinit ... Done !!!
+root@am62axx-evm:/opt/edgeai-tiovx-apps# kill "$(cat /tmp/dmesg.pid)"
+root@am62axx-evm:/opt/edgeai-tiovx-apps# tail -n 50 /tmp/dmesg.log
+[Thu Jan  1 00:00:45 1970] remoteproc remoteproc1: Booting fw image am62a-mcu-r5f0_0-fw, size 53172
+[Thu Jan  1 00:00:45 1970] rproc-virtio rproc-virtio.9.auto: assigned reserved memory node r5f-dma-memory@9b800000
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: rpmsg host is online
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: creating channel ti.ipc4.ping-pong addr 0xd
+[Thu Jan  1 00:00:45 1970] rproc-virtio rproc-virtio.9.auto: registered virtio1 (type 7)
+[Thu Jan  1 00:00:45 1970] remoteproc remoteproc1: remote processor 79000000.r5f is now up
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: creating channel rpmsg_chrdev addr 0xe
+[Thu Jan  1 00:00:46 1970] videodev: Linux video capture interface: v2.00
+[Thu Jan  1 00:00:46 1970] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[Thu Jan  1 00:00:46 1970] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[Thu Jan  1 00:00:46 1970] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[Thu Jan  1 00:00:46 1970] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+[Thu Jan  1 00:00:46 1970] cfg80211: failed to load regulatory.db
+[Thu Jan  1 00:00:47 1970] mtdblock: MTD device 'ospi_nand.dtb' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:48 1970] e5010 fd20000.jpeg-encoder: Device registered as /dev/video0
+[Thu Jan  1 00:00:48 1970] mtdblock: MTD device 'ospi_nand.env.backup' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: error -ENXIO: IRQ index 0 not found
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: failed to get irq resource, falling back to polling
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: OPP table not found in device tree
+[Thu Jan  1 00:00:48 1970] mtdblock: MTD device 'ospi_nand.u-boot' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:49 1970] mtdblock: MTD device 'ospi_nand.tiboot3' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:50 1970] am65-cpsw-nuss 8000000.ethernet eth0: PHY [8000f00.mdio:00] driver [TI DP83867] (irq=POLL)
+[Thu Jan  1 00:00:50 1970] am65-cpsw-nuss 8000000.ethernet eth0: configuring for phy/rgmii-rxid link mode
+[Thu Jan  1 00:00:50 1970] mtdblock: MTD device 'ospi_nand.rootfs' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:51 1970] mtdblock: MTD device 'ospi_nand.kernel' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Added wave5 driver with caps: 'ENCODE' 'DECODE'
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Product Code:      0x521c
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Firmware Revision: 334314
+[Thu Jan  1 00:00:53 1970] mtdblock: MTD device 'ospi_nand.env' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:54 1970] mtdblock: MTD device 'ospi_nand.tispl' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:55 1970] mtdblock: MTD device 'ospi_nand.rootfs' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:57 1970] FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[Thu Jan  1 00:00:57 1970] FAT-fs (mmcblk1p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[Thu Jan  1 00:00:58 1970] EXT4-fs (mmcblk1p2): mounting ext3 file system using the ext4 subsystem
+[Thu Jan  1 00:00:58 1970] EXT4-fs (mmcblk1p2): mounted filesystem 54efb1d1-9ee3-469f-9ea4-b968ac69f78f r/w with ordered data mode. Quota mode: none.
+[Thu Jan  1 00:01:02 1970] remoteproc remoteproc0: powering up 7e000000.dsp
+[Thu Jan  1 00:01:02 1970] remoteproc remoteproc0: Booting fw image am62a-c71_0-fw, size 10719312
+[Thu Jan  1 00:01:02 1970] k3-dsp-rproc 7e000000.dsp: booting DSP core using boot addr = 0x99a00000
+[Thu Jan  1 00:01:02 1970] rproc-virtio rproc-virtio.10.auto: assigned reserved memory node c7x-dma-memory@99800000
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio2: rpmsg host is online
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio2: creating channel rpmsg_chrdev addr 0xd
+[Thu Jan  1 00:01:02 1970] rproc-virtio rproc-virtio.10.auto: registered virtio2 (type 7)
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio0: creating channel rpmsg_chrdev addr 0x15
+[Thu Jan  1 00:01:02 1970] remoteproc remoteproc0: remote processor 7e000000.dsp is now up
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio2: creating channel rpmsg_chrdev addr 0x15
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio0: creating channel ti.ipc4.ping-pong addr 0xe
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio2: creating channel ti.ipc4.ping-pong addr 0xe
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio2: msg received with no recipient
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio0: msg received with no recipient
+[Thu Jan  1 00:09:40 1970] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+[1]+  Terminated              dmesg -T -w > /tmp/dmesg.log
+root@am62axx-evm:/opt/edgeai-tiovx-apps# ls /run/edgeai-out/
+0000.yuv  0001.yuv  0002.yuv  0003.yuv  0004.yuv  0005.yuv  0006.yuv  0007.yuv
+root@am62axx-evm:/opt/edgeai-tiovx-apps# cat configs/linux/object_detection.yaml
+title: Object Detection
+inputs:
+    input0:
+        source: VIDEO
+        width: 1280
+        height: 768
+        video_path: /opt/edgeai-test-data/videos/video0_1280_768.h264
+models:
+    model0:
+        model_path: /opt/model_zoo/TFL-OD-2020-ssdLite-mobDet-DSP-coco-320x320
+        viz-threshold: 0.6
+    model1:
+        model_path: /opt/model_zoo/ONR-OD-8200-yolox-nano-lite-mmdet-coco-416x416
+        viz-threshold: 0.6
+outputs:
+    output0:
+        sink: LINUX_DISPLAY
+        width: 1280
+        height: 768
+    output1:
+        sink: H264_ENCODE
+        width: 1920
+        height: 1088
+        output_path: /opt/edgeai-test-data/output/output_video0.h264
+    output2:
+        sink: IMG_DIR
+        width: 1920
+        height: 1080
+        output_path: /run/edgeai-out
+flows:
+    flow0:
+        pipeline: [input0,model1,output2]
+        mosaic:
+            - [0,0,1280,720]root@am62axx-evm:/opt/edgeai-tiovx-apps#

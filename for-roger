@@ -1804,3 +1804,382 @@ root@am62axx-evm:/opt/edgeai-tiovx-apps#  tail -n 50 /tmp/dmesg.log
 [1]+  Terminated              dmesg -T -w > /tmp/dmesg.log
 root@am62axx-evm:/opt/edgeai-tiovx-apps#
 
+##################### 添加decode_only.yaml + mount执行
+root@am62axx-evm:~# grep -H . /sys/class/video4linux/video*/name
+/sys/class/video4linux/video0/name:e5010
+/sys/class/video4linux/video1/name:C&M Wave5 VPU decoder
+/sys/class/video4linux/video2/name:C&M Wave5 VPU encoder
+root@am62axx-evm:~#  cd /opt/edgeai-tiovx-apps/
+root@am62axx-evm:/opt/edgeai-tiovx-apps# mkdir -p /run/edgeai-out
+root@am62axx-evm:/opt/edgeai-tiovx-apps# cat configs/linux/decode_only.yaml
+title: Decode Only
+inputs:
+    input0:
+        source: VIDEO
+        width: 1280
+        height: 768
+        video_path: /opt/edgeai-test-data/videos/video0_1280_768.h264
+outputs:
+    output0:
+        sink: IMG_DIR
+        width: 1280
+        height: 768
+        output_path: /run/edgeai-out
+flows:
+    flow0:
+        pipeline: [input0,null,output0]
+        mosaic:
+            - [0,0,1280,768]
+root@am62axx-evm:/opt/edgeai-tiovx-apps# mount --bind /dev/video1 /dev/video0
+root@am62axx-evm:/opt/edgeai-tiovx-apps# dmesg -T -w > /tmp/dmesg.log & echo $! > /tmp/dmesg.pid
+[1] 668
+root@am62axx-evm:/opt/edgeai-tiovx-apps# timeout -s INT -k 5s 20s ./bin/Release/edgeai-tiovx-apps-main -v configs/linux/decode_only.yaml
+APP: Init ... !!!
+  2125.748660 s: MEM: Init ... !!!
+  2125.752314 s: MEM: Initialized DMA HEAP (fd=5) !!!
+  2125.759659 s: MEM: Init ... Done !!!
+  2125.766808 s: IPC: Init ... !!!
+  2125.784020 s: IPC: Init ... Done !!!
+REMOTE_SERVICE: Init ... !!!
+REMOTE_SERVICE: Init ... Done !!!
+  2125.799423 s: GTC Frequency = 200 MHz
+APP: Init ... Done !!!
+  2125.815505 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_ERROR
+  2125.815543 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_WARNING
+  2125.815562 s:  VX_ZONE_INFO: Globally Enabled VX_ZONE_INFO
+  2125.875445 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-0
+  2125.875672 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-1
+  2125.875793 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-2
+  2125.875920 s:  VX_ZONE_INFO: [tivxPlatformCreateTargetId:134] Added target MPU-3
+  2125.875936 s:  VX_ZONE_INFO: [tivxInitLocal:126] Initialization Done !!!
+  2125.875953 s:  VX_ZONE_INFO: Globally Disabled VX_ZONE_INFO
+Input #0, h264, from '/opt/edgeai-test-data/videos/video0_1280_768.h264':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: h264 (High), yuv420p(progressive), 1280x768, 25 fps, 60 tbr, 1200k tbn
+================================================
+
+CPU: mpu: TOTAL LOAD = 5.97
+CPU: mcu1_0: TOTAL LOAD = 11.02
+CPU:  c7x_1: TOTAL LOAD = 0.01
+HWA:   MSC0: LOAD = 130.53 % ( 335 MP/s )
+HWA:   MSC1: LOAD = 47.97 % ( 40 MP/s )
+DDR: READ  BW: AVG =   1138 MB/s, PEAK =   1138 MB/s
+DDR: WRITE BW: AVG =    815 MB/s, PEAK =    815 MB/s
+DDR: TOTAL BW: AVG =   1953 MB/s, PEAK =   1953 MB/s
+TEMP: thermal_zone0(DDR) = 44.53 C
+TEMP: thermal_zone1(CPU) = 44.30 C
+TEMP: thermal_zone2(C7x) = 37.58 C
+FPS: 107
+
+
+Graph - 12.886 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 6.20
+CPU: mcu1_0: TOTAL LOAD = 6.50
+CPU:  c7x_1: TOTAL LOAD = 0.01
+HWA:   MSC0: LOAD = 134.87 % ( 349 MP/s )
+HWA:   MSC1: LOAD = 49.82 % ( 41 MP/s )
+DDR: READ  BW: AVG =   1165 MB/s, PEAK =   1165 MB/s
+DDR: WRITE BW: AVG =    849 MB/s, PEAK =    849 MB/s
+DDR: TOTAL BW: AVG =   2014 MB/s, PEAK =   2014 MB/s
+TEMP: thermal_zone0(DDR) = 44.53 C
+TEMP: thermal_zone1(CPU) = 43.61 C
+TEMP: thermal_zone2(C7x) = 38.05 C
+FPS: 118
+
+
+Graph - 12.308 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 5.50
+CPU: mcu1_0: TOTAL LOAD = 6.18
+CPU:  c7x_1: TOTAL LOAD = 0.01
+HWA:   MSC0: LOAD = 134.82 % ( 349 MP/s )
+HWA:   MSC1: LOAD = 49.81 % ( 41 MP/s )
+DDR: READ  BW: AVG =   1153 MB/s, PEAK =   1153 MB/s
+DDR: WRITE BW: AVG =    841 MB/s, PEAK =    841 MB/s
+DDR: TOTAL BW: AVG =   1994 MB/s, PEAK =   1994 MB/s
+TEMP: thermal_zone0(DDR) = 44.75 C
+TEMP: thermal_zone1(CPU) = 44.75 C
+TEMP: thermal_zone2(C7x) = 38.28 C
+FPS: 118
+
+
+Graph - 12.129 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 5.73
+CPU: mcu1_0: TOTAL LOAD = 6.22
+CPU:  c7x_1: TOTAL LOAD = 0.01
+HWA:   MSC0: LOAD = 135.06 % ( 348 MP/s )
+HWA:   MSC1: LOAD = 49.79 % ( 41 MP/s )
+DDR: READ  BW: AVG =   1159 MB/s, PEAK =   1159 MB/s
+DDR: WRITE BW: AVG =    842 MB/s, PEAK =    842 MB/s
+DDR: TOTAL BW: AVG =   2001 MB/s, PEAK =   2001 MB/s
+TEMP: thermal_zone0(DDR) = 44.53 C
+TEMP: thermal_zone1(CPU) = 44.07 C
+TEMP: thermal_zone2(C7x) = 38.05 C
+FPS: 118
+
+
+Graph - 12.049 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 6.20
+CPU: mcu1_0: TOTAL LOAD = 6.13
+CPU:  c7x_1: TOTAL LOAD = 0.01
+HWA:   MSC0: LOAD = 134.93 % ( 349 MP/s )
+HWA:   MSC1: LOAD = 49.81 % ( 41 MP/s )
+DDR: READ  BW: AVG =   1155 MB/s, PEAK =   1155 MB/s
+DDR: WRITE BW: AVG =    843 MB/s, PEAK =    843 MB/s
+DDR: TOTAL BW: AVG =   1998 MB/s, PEAK =   1998 MB/s
+TEMP: thermal_zone0(DDR) = 44.53 C
+TEMP: thermal_zone1(CPU) = 44.53 C
+TEMP: thermal_zone2(C7x) = 38.75 C
+FPS: 118
+
+
+Graph - 11.998 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 5.48
+CPU: mcu1_0: TOTAL LOAD = 6.51
+CPU:  c7x_1: TOTAL LOAD = 0.01
+HWA:   MSC0: LOAD = 135.02 % ( 349 MP/s )
+HWA:   MSC1: LOAD = 49.81 % ( 41 MP/s )
+DDR: READ  BW: AVG =   1153 MB/s, PEAK =   1153 MB/s
+DDR: WRITE BW: AVG =    841 MB/s, PEAK =    841 MB/s
+DDR: TOTAL BW: AVG =   1994 MB/s, PEAK =   1994 MB/s
+TEMP: thermal_zone0(DDR) = 44.75 C
+TEMP: thermal_zone1(CPU) = 44.53 C
+TEMP: thermal_zone2(C7x) = 38.28 C
+FPS: 118
+
+
+Graph - 11.965 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 5.73
+CPU: mcu1_0: TOTAL LOAD = 6.61
+CPU:  c7x_1: TOTAL LOAD = 0.01
+HWA:   MSC0: LOAD = 135.00 % ( 349 MP/s )
+HWA:   MSC1: LOAD = 49.82 % ( 41 MP/s )
+DDR: READ  BW: AVG =   1160 MB/s, PEAK =   1160 MB/s
+DDR: WRITE BW: AVG =    844 MB/s, PEAK =    844 MB/s
+DDR: TOTAL BW: AVG =   2004 MB/s, PEAK =   2004 MB/s
+TEMP: thermal_zone0(DDR) = 44.98 C
+TEMP: thermal_zone1(CPU) = 44.53 C
+TEMP: thermal_zone2(C7x) = 38.75 C
+FPS: 118
+
+
+Graph - 11.941 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 5.50
+CPU: mcu1_0: TOTAL LOAD = 6.54
+CPU:  c7x_1: TOTAL LOAD = 0.01
+HWA:   MSC0: LOAD = 134.96 % ( 349 MP/s )
+HWA:   MSC1: LOAD = 49.81 % ( 41 MP/s )
+DDR: READ  BW: AVG =   1152 MB/s, PEAK =   1152 MB/s
+DDR: WRITE BW: AVG =    842 MB/s, PEAK =    842 MB/s
+DDR: TOTAL BW: AVG =   1994 MB/s, PEAK =   1994 MB/s
+TEMP: thermal_zone0(DDR) = 45.66 C
+TEMP: thermal_zone1(CPU) = 44.98 C
+TEMP: thermal_zone2(C7x) = 38.98 C
+FPS: 118
+
+
+Graph - 11.923 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 5.48
+CPU: mcu1_0: TOTAL LOAD = 6.24
+CPU:  c7x_1: TOTAL LOAD = 0.01
+HWA:   MSC0: LOAD = 135.13 % ( 349 MP/s )
+HWA:   MSC1: LOAD = 49.81 % ( 41 MP/s )
+DDR: READ  BW: AVG =   1160 MB/s, PEAK =   1160 MB/s
+DDR: WRITE BW: AVG =    841 MB/s, PEAK =    841 MB/s
+DDR: TOTAL BW: AVG =   2001 MB/s, PEAK =   2001 MB/s
+TEMP: thermal_zone0(DDR) = 44.53 C
+TEMP: thermal_zone1(CPU) = 44.30 C
+TEMP: thermal_zone2(C7x) = 38.75 C
+FPS: 118
+
+
+Graph - 11.911 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 5.73
+CPU: mcu1_0: TOTAL LOAD = 6.89
+CPU:  c7x_1: TOTAL LOAD = 0.01
+HWA:   MSC0: LOAD = 134.90 % ( 349 MP/s )
+HWA:   MSC1: LOAD = 49.81 % ( 41 MP/s )
+DDR: READ  BW: AVG =   1155 MB/s, PEAK =   1155 MB/s
+DDR: WRITE BW: AVG =    843 MB/s, PEAK =    843 MB/s
+DDR: TOTAL BW: AVG =   1998 MB/s, PEAK =   1998 MB/s
+TEMP: thermal_zone0(DDR) = 44.98 C
+TEMP: thermal_zone1(CPU) = 44.53 C
+TEMP: thermal_zone2(C7x) = 38.51 C
+FPS: 118
+
+
+Graph - 11.900 ms
+================================================
+
+================================================
+
+CPU: mpu: TOTAL LOAD = 5.72
+CPU: mcu1_0: TOTAL LOAD = 6.51
+CPU:  c7x_1: TOTAL LOAD = 0.01
+HWA:   MSC0: LOAD = 134.95 % ( 348 MP/s )
+HWA:   MSC1: LOAD = 49.77 % ( 41 MP/s )
+DDR: READ  BW: AVG =   1152 MB/s, PEAK =   1152 MB/s
+DDR: WRITE BW: AVG =    840 MB/s, PEAK =    840 MB/s
+DDR: TOTAL BW: AVG =   1992 MB/s, PEAK =   1992 MB/s
+TEMP: thermal_zone0(DDR) = 44.98 C
+TEMP: thermal_zone1(CPU) = 44.98 C
+TEMP: thermal_zone2(C7x) = 38.98 C
+FPS: 118
+
+
+Graph - 11.892 ms
+================================================
+
+[  187.379706] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+  2142.536088 s:  VX_ZONE_WARNING: [vxReleaseContext:1275] Found a reference 0xffff87b7e070 of type 0000080f at external count 1, internal count 0, releasing it
+  2142.536220 s:  VX_ZONE_WARNING: [vxReleaseContext:1277] Releasing reference (name=image_90) now as a part of garbage collection
+APP: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... !!!
+REMOTE_SERVICE: Deinit ... Done !!!
+  2142.541570 s: IPC: Deinit ... !!!
+  2142.542068 s: IPC: DeInit ... Done !!!
+  2142.542111 s: MEM: Deinit ... !!!
+  2142.542125 s: DDR_SHARED_MEM: Alloc's: 25 alloc's of 28815560 bytes
+  2142.542136 s: DDR_SHARED_MEM: Free's : 25 free's  of 28815560 bytes
+  2142.542146 s: DDR_SHARED_MEM: Open's : 0 allocs  of 0 bytes
+  2142.542193 s: MEM: Deinit ... Done !!!
+APP: Deinit ... Done !!!
+root@am62axx-evm:/opt/edgeai-tiovx-apps# kill "$(cat /tmp/dmesg.pid)"
+root@am62axx-evm:/opt/edgeai-tiovx-apps# tail -n 100 /tmp/dmesg.log
+[Thu Jan  1 00:00:39 1970] systemd-journald[115]: Received client request to flush runtime journal.
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487100.312:2): prog-id=6 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487100.316:3): prog-id=7 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487100.324:4): prog-id=8 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487100.776:5): prog-id=9 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487100.784:6): prog-id=10 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487101.156:7): prog-id=11 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487101.232:8): prog-id=11 op=UNLOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487101.256:9): prog-id=12 op=LOAD
+[Thu Jan  1 00:00:40 1970] audit: type=1334 audit(1728487101.280:10): prog-id=12 op=UNLOAD
+[Thu Jan  1 00:00:41 1970] audit: type=1334 audit(1728487101.384:11): prog-id=13 op=LOAD
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.tiboot3' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.env' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.u-boot' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.env.backup' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:42 1970] omap-mailbox 29000000.mailbox: omap mailbox rev 0x66fca100
+[Thu Jan  1 00:00:42 1970] omap-mailbox 29010000.mailbox: omap mailbox rev 0x66fca100
+[Thu Jan  1 00:00:42 1970] omap-mailbox 29020000.mailbox: omap mailbox rev 0x66fca100
+[Thu Jan  1 00:00:42 1970] omap-mailbox 29030000.mailbox: no available mbox devices found
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.dtb' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:42 1970] mtdblock: MTD device 'ospi_nand.rootfs' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:43 1970] tps6598x 0-003f: Unable to find the interrupt, switching to polling
+[Thu Jan  1 00:00:43 1970] sii902x 1-003b: supply iovcc not found, using dummy regulator
+[Thu Jan  1 00:00:43 1970] sii902x 1-003b: supply cvcc12 not found, using dummy regulator
+[Thu Jan  1 00:00:43 1970] i2c i2c-1: Added multiplexed i2c bus 3
+[Thu Jan  1 00:00:44 1970] k3-dsp-rproc 7e000000.dsp: assigned reserved memory node c7x-dma-memory@99800000
+[Thu Jan  1 00:00:44 1970] k3-dsp-rproc 7e000000.dsp: configured DSP for remoteproc mode
+[Thu Jan  1 00:00:44 1970] k3-dsp-rproc 7e000000.dsp: local reset is deasserted for device
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc0: 7e000000.dsp is available
+[Thu Jan  1 00:00:44 1970] [drm] Initialized tidss 1.0.0 20180215 for 30200000.dss on minor 0
+[Thu Jan  1 00:00:44 1970] Console: switching to colour frame buffer device 240x67
+[Thu Jan  1 00:00:44 1970] tidss 30200000.dss: [drm] fb0: tidssdrmfb frame buffer device
+[Thu Jan  1 00:00:44 1970] mc: Linux media interface: v0.10
+[Thu Jan  1 00:00:44 1970] platform 79000000.r5f: configured R5F for remoteproc mode
+[Thu Jan  1 00:00:44 1970] platform 79000000.r5f: assigned reserved memory node r5f-dma-memory@9b800000
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc1: 79000000.r5f is available
+[Thu Jan  1 00:00:44 1970] platform 78000000.r5f: R5F core may have been powered on by a different host, programmed state (0) != actual state (1)
+[Thu Jan  1 00:00:44 1970] platform 78000000.r5f: configured R5F for IPC-only mode
+[Thu Jan  1 00:00:44 1970] platform 78000000.r5f: assigned reserved memory node r5f-dma-memory@9c800000
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc2: 78000000.r5f is available
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc2: attaching to 78000000.r5f
+[Thu Jan  1 00:00:44 1970] rproc-virtio rproc-virtio.8.auto: assigned reserved memory node r5f-dma-memory@9c800000
+[Thu Jan  1 00:00:44 1970] virtio_rpmsg_bus virtio0: rpmsg host is online
+[Thu Jan  1 00:00:44 1970] virtio_rpmsg_bus virtio0: creating channel rpmsg_chrdev addr 0xd
+[Thu Jan  1 00:00:44 1970] rproc-virtio rproc-virtio.8.auto: registered virtio0 (type 7)
+[Thu Jan  1 00:00:44 1970] remoteproc remoteproc2: remote processor 78000000.r5f is now attached
+[Thu Jan  1 00:00:44 1970] rtc-ti-k3 2b1f0000.rtc: registered as rtc0
+[Thu Jan  1 00:00:44 1970] rtc-ti-k3 2b1f0000.rtc: setting system clock to 1970-01-01T00:00:44 UTC (44)
+[Thu Jan  1 00:00:44 1970] systemd-journald[115]: Time jumped backwards, rotating.
+[Thu Jan  1 00:00:45 1970] remoteproc remoteproc1: powering up 79000000.r5f
+[Thu Jan  1 00:00:45 1970] remoteproc remoteproc1: Booting fw image am62a-mcu-r5f0_0-fw, size 53172
+[Thu Jan  1 00:00:45 1970] rproc-virtio rproc-virtio.9.auto: assigned reserved memory node r5f-dma-memory@9b800000
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: rpmsg host is online
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: creating channel ti.ipc4.ping-pong addr 0xd
+[Thu Jan  1 00:00:45 1970] virtio_rpmsg_bus virtio1: creating channel rpmsg_chrdev addr 0xe
+[Thu Jan  1 00:00:45 1970] rproc-virtio rproc-virtio.9.auto: registered virtio1 (type 7)
+[Thu Jan  1 00:00:45 1970] remoteproc remoteproc1: remote processor 79000000.r5f is now up
+[Thu Jan  1 00:00:46 1970] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[Thu Jan  1 00:00:46 1970] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[Thu Jan  1 00:00:46 1970] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[Thu Jan  1 00:00:46 1970] videodev: Linux video capture interface: v2.00
+[Thu Jan  1 00:00:46 1970] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+[Thu Jan  1 00:00:46 1970] cfg80211: failed to load regulatory.db
+[Thu Jan  1 00:00:47 1970] mtdblock: MTD device 'ospi_nand.dtb' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:48 1970] e5010 fd20000.jpeg-encoder: Device registered as /dev/video0
+[Thu Jan  1 00:00:48 1970] mtdblock: MTD device 'ospi_nand.env.backup' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: error -ENXIO: IRQ index 0 not found
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: failed to get irq resource, falling back to polling
+[Thu Jan  1 00:00:48 1970] vdec 30210000.video-codec: OPP table not found in device tree
+[Thu Jan  1 00:00:48 1970] mtdblock: MTD device 'ospi_nand.u-boot' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:49 1970] mtdblock: MTD device 'ospi_nand.tiboot3' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:50 1970] am65-cpsw-nuss 8000000.ethernet eth0: PHY [8000f00.mdio:00] driver [TI DP83867] (irq=POLL)
+[Thu Jan  1 00:00:50 1970] am65-cpsw-nuss 8000000.ethernet eth0: configuring for phy/rgmii-rxid link mode
+[Thu Jan  1 00:00:50 1970] mtdblock: MTD device 'ospi_nand.rootfs' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:50 1970] mtdblock: MTD device 'ospi_nand.kernel' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Added wave5 driver with caps: 'ENCODE' 'DECODE'
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Product Code:      0x521c
+[Thu Jan  1 00:00:52 1970] vdec 30210000.video-codec: Firmware Revision: 334314
+[Thu Jan  1 00:00:53 1970] mtdblock: MTD device 'ospi_nand.env' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:53 1970] mtdblock: MTD device 'ospi_nand.tispl' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:55 1970] mtdblock: MTD device 'ospi_nand.rootfs' is NAND, please consider using UBI block devices instead.
+[Thu Jan  1 00:00:57 1970] FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[Thu Jan  1 00:00:57 1970] FAT-fs (mmcblk1p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[Thu Jan  1 00:00:58 1970] EXT4-fs (mmcblk1p2): mounting ext3 file system using the ext4 subsystem
+[Thu Jan  1 00:00:58 1970] EXT4-fs (mmcblk1p2): mounted filesystem 54efb1d1-9ee3-469f-9ea4-b968ac69f78f r/w with ordered data mode. Quota mode: none.
+[Thu Jan  1 00:01:01 1970] remoteproc remoteproc0: powering up 7e000000.dsp
+[Thu Jan  1 00:01:01 1970] remoteproc remoteproc0: Booting fw image am62a-c71_0-fw, size 10719312
+[Thu Jan  1 00:01:02 1970] k3-dsp-rproc 7e000000.dsp: booting DSP core using boot addr = 0x99a00000
+[Thu Jan  1 00:01:02 1970] rproc-virtio rproc-virtio.10.auto: assigned reserved memory node c7x-dma-memory@99800000
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio2: rpmsg host is online
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio2: creating channel rpmsg_chrdev addr 0xd
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio0: creating channel rpmsg_chrdev addr 0x15
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio2: creating channel rpmsg_chrdev addr 0x15
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio0: creating channel ti.ipc4.ping-pong addr 0xe
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio0: msg received with no recipient
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio2: creating channel ti.ipc4.ping-pong addr 0xe
+[Thu Jan  1 00:01:02 1970] virtio_rpmsg_bus virtio2: msg received with no recipient
+[Thu Jan  1 00:01:02 1970] rproc-virtio rproc-virtio.10.auto: registered virtio2 (type 7)
+[Thu Jan  1 00:01:02 1970] remoteproc remoteproc0: remote processor 7e000000.dsp is now up
+[Thu Jan  1 00:03:26 1970] vdec 30210000.video-codec: wave5_vpu_firmware_command_queue_error_check: result not ready: 0x800
+[1]+  Terminated              dmesg -T -w > /tmp/dmesg.log
+root@am62axx-evm:/opt/edgeai-tiovx-apps#
